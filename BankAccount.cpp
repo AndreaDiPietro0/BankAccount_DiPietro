@@ -4,8 +4,10 @@
 
 #include "BankAccount.h"
 
+#include <utility>
+
 BankAccount::BankAccount(std::string name, double initialBalance)
-        : ownerName(name), balance(initialBalance) {
+        : ownerName(std::move(name)), balance(initialBalance) {
 }
 
 double BankAccount::getBalance() const {
@@ -39,14 +41,13 @@ bool BankAccount::transfer(BankAccount& receiver, double amount) {
     balance -= amount;
     addTransaction(amount, Transaction::EXPENSE, "Transfer to " + receiver.getOwnerName());
 
-    // aggiungo soldi all'altro conto
-    // uso deposit() dell'altro conto per semplicità
+    // aggiungo soldi all'altro conto con deposit() dell'altro conto per semplicità
     receiver.deposit(amount);
 
     return true;
 }
 
 void BankAccount::addTransaction(double amount, Transaction::Type type, std::string desc) {
-    Transaction t(amount, type, desc);
+    Transaction t(amount, type, std::move(desc));
     transactions.push_back(t);
 }

@@ -24,7 +24,7 @@ private:
     double amount;
     Type type;
     std::string description;
-    std::string date; // Data e ora della transazione
+    std::string date;
 };
 
 

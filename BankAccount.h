@@ -11,13 +11,13 @@
 
 class BankAccount {
 public:
-    BankAccount(std::string ownerName, double initialBalance = 0.0);
+    explicit BankAccount(std::string ownerName, double initialBalance = 0.0);
 
     double getBalance() const;
     std::string getOwnerName() const;
     std::vector<Transaction> getTransactionHistory() const;
 
-    // Operazioni
+    // operazioni possibili
     void deposit(double amount);
     bool withdraw(double amount);
     bool transfer(BankAccount& receiver, double amount);

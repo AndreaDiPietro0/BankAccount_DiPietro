@@ -8,16 +8,16 @@
 #include <chrono>
 #include <iomanip>
 #include <sstream>
+#include <utility>
 
 Transaction::Transaction(double amt, Type t, std::string desc)
-        : amount(amt), type(t), description(desc) {
+        : amount(amt), type(t), description(std::move(desc)) {
 
-    // Logica per ottenere la data e ora corrente automaticamente
-    auto now = std::chrono::system_clock::now();
-    std::time_t now_c = std::chrono::system_clock::to_time_t(now);
-    std::stringstream ss;
-    ss << std::put_time(std::localtime(&now_c), "%Y-%m-%d %H:%M:%S");
-    date = ss.str();
+    auto now = std::chrono::system_clock::now();  // prende ora esatta
+    std::time_t now_c = std::chrono::system_clock::to_time_t(now);   //converte time point in time t
+    std::stringstream ss;  //stampa su una var di memoria
+    ss << std::put_time(std::localtime(&now_c), "%Y-%m-%d %H:%M:%S"); //prende l'ora e separa tempo in a,m,g..., put time ordina i valori in Y-M... e mette in ss
+    date = ss.str();  // stringa date contiene data ok
 }
 
 double Transaction::getAmount() const {
