@@ -1,0 +1,16 @@
+# file di compilazione cmake
+cmake-build-*/
+CMakeCache.txt
+CMakeFiles/
+Makefile
+*.cmake
+
+# file di configurazione clion
+.idea/
+*.user
+
+# file di sistema mac
+.DS_Store
+
+# eseguibili
+BankApp
