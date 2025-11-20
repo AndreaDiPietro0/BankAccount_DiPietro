@@ -12,12 +12,14 @@ class MainWindow : public QMainWindow {
     Q_OBJECT
 
 public:
-    MainWindow(QWidget *parent = nullptr);
+    MainWindow(QString nome, double saldo, QWidget *parent = nullptr);
     ~MainWindow();
 
 private slots:
     void on_btnDeposita_clicked();
     void on_btnPreleva_clicked();
+
+    void on_btnBonifico_clicked();
 
     void on_btnSave_clicked();
     void on_btnLoad_clicked();

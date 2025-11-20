@@ -10,11 +10,14 @@ int main(int argc, char *argv[]) {
     //welcome.exec() blocca il programma finché l'utente non clicca accedi
     if (welcome.exec() == QDialog::Accepted) {
 
-        // entrato, apre  banca
-        MainWindow w;
+        // prende dati inseriti
+        QString nomeScelto = welcome.getNome();
+        double saldoScelto = welcome.getSaldo();
+
+        // crea la finestra principale con quei dati
+        MainWindow w(nomeScelto, saldoScelto);
         w.show();
 
-        // ciclo principale
         return a.exec();
     }
 

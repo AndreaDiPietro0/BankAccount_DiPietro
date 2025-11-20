@@ -5,14 +5,18 @@
 #include <QFile>        //  gestire il file fisico
 #include <QTextStream>  // scrivere testo nel file
 
-MainWindow::MainWindow(QWidget *parent)
+MainWindow::MainWindow(QString nome, double saldo, QWidget *parent)
         : QMainWindow(parent)
         , ui(new Ui::MainWindow)
 {
     ui->setupUi(this);
+    ui->spinBoxImporto->setMaximum(10000000.0);
 
-    // Inizializza un conto di prova
-    myAccount = new BankAccount("Utente Mac M1", 1000.0);
+    //ui->editDestinatario->setPlaceholderText("Nome Destinatario");
+    // nome di default se vuoto
+    if(nome.isEmpty()) nome = "Guest User";
+
+    myAccount = new BankAccount(nome.toStdString(), saldo);
 
     aggiornaInterfaccia();
 }
@@ -100,4 +104,37 @@ void MainWindow::aggiornaInterfaccia() {
     ui->labelSaldo->setText("Saldo: " + QString::number(myAccount->getBalance()) + " EUR");
     // aggiorna anche il titolo della finestra col nome del proprietario
     this->setWindowTitle("Conto di: " + QString::fromStdString(myAccount->getOwnerName()));
+}
+
+void MainWindow::on_btnBonifico_clicked() {
+    //prende l'importo dalla stessa casella
+    double importo = ui->spinBoxImporto->value();
+
+    //prende nome
+    QString destinatario = ui->editDestinatario->text();
+
+    //nome non vuoto
+    if (destinatario.isEmpty()) {
+        QMessageBox::warning(this, "Errore", "Devi inserire il nome del destinatario!");
+        return;
+    }
+
+    //conto x destinatario
+    BankAccount contoDestinatario(destinatario.toStdString(), 0.0);
+
+    //bonifico transfer  TRUE se funziona, FALSE se soldi non bastano
+    bool esito = myAccount->transfer(contoDestinatario, importo);
+
+    if (esito) {
+        QMessageBox::information(this, "Successo",
+                                 "Bonifico di " + QString::number(importo) + "€ inviato a " + destinatario);
+
+        //cancella nome
+        ui->editDestinatario->clear();
+    } else {
+        QMessageBox::warning(this, "Errore", "Fondi insufficienti per il bonifico!");
+    }
+
+    // aggiorna saldo
+    aggiornaInterfaccia();
 }

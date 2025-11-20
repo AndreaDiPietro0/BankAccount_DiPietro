@@ -20,6 +20,9 @@ public:
 
     ~WelcomeDialog() override;
 
+    QString getNome() const;
+    double getSaldo() const;
+
 private:
     Ui::WelcomeDialog *ui;
 };
