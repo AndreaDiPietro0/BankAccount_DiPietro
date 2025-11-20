@@ -16,8 +16,11 @@ public:
     ~MainWindow();
 
 private slots:
-            void on_btnDeposita_clicked();
+    void on_btnDeposita_clicked();
     void on_btnPreleva_clicked();
+
+    void on_btnSave_clicked();
+    void on_btnLoad_clicked();
 
 private:
     Ui::MainWindow *ui;
