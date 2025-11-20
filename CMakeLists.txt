@@ -3,12 +3,21 @@ project(BankAccount)
 
 set(CMAKE_CXX_STANDARD 17)
 
-add_executable(BankAccount main.cpp
-        Transaction.cpp
-        Transaction.h
-        BankAccount.cpp
-        BankAccount.h
-       )
+set(CMAKE_AUTOMOC ON)
+set(CMAKE_AUTORCC ON)
+set(CMAKE_AUTOUIC ON)
+
+set(CMAKE_PREFIX_PATH "/opt/homebrew/opt/qt")
+
+find_package(Qt6 REQUIRED COMPONENTS Core Widgets)
+
+add_executable(BankAccount
+        main.cpp
+        MainWindow.cpp
+        MainWindow.h
+        MainWindow.ui
+)
+target_link_libraries(BankAccount PRIVATE Qt6::Widgets BankCore)
 
 # Scarica GoogleTest
 include(FetchContent)
