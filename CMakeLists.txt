@@ -8,8 +8,7 @@ add_executable(BankAccount main.cpp
         Transaction.h
         BankAccount.cpp
         BankAccount.h
-        tests/testBankAccount.cpp
-        tests/testTransaction.cpp)
+       )
 
 # Scarica GoogleTest
 include(FetchContent)
