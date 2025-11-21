@@ -16,7 +16,7 @@ public:
     Transaction(double amount, Type type, std::string description);
 
     double getAmount() const;
-    Type getType() const;
+    Type getType() const;  //TransactionType getType() const;
     std::string getDescription() const;
     std::string getDate() const; //restituisce la data come stringa
 

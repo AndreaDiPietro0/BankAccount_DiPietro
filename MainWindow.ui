@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>800</width>
-    <height>600</height>
+    <width>977</width>
+    <height>771</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -69,7 +69,7 @@
    <widget class="QPushButton" name="btnSave">
     <property name="geometry">
      <rect>
-      <x>50</x>
+      <x>30</x>
       <y>480</y>
       <width>171</width>
       <height>31</height>
@@ -131,13 +131,23 @@
      <string>inserisci destinatario bonifico</string>
     </property>
    </widget>
+   <widget class="QListWidget" name="listTransactions">
+    <property name="geometry">
+     <rect>
+      <x>620</x>
+      <y>130</y>
+      <width>256</width>
+      <height>192</height>
+     </rect>
+    </property>
+   </widget>
   </widget>
   <widget class="QMenuBar" name="menubar">
    <property name="geometry">
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>800</width>
+     <width>977</width>
      <height>30</height>
     </rect>
    </property>

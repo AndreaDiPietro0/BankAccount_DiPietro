@@ -4,6 +4,8 @@
 #include <QFileDialog>  //  aprire le finestre di salvataggio
 #include <QFile>        //  gestire il file fisico
 #include <QTextStream>  // scrivere testo nel file
+#include <vector>
+#include "Transaction.h"
 
 MainWindow::MainWindow(QString nome, double saldo, QWidget *parent)
         : QMainWindow(parent)
@@ -100,10 +102,41 @@ void MainWindow::on_btnLoad_clicked() {
 }
 
 void MainWindow::aggiornaInterfaccia() {
-    // aggiorna la Label
-    ui->labelSaldo->setText("Saldo: " + QString::number(myAccount->getBalance()) + " EUR");
-    // aggiorna anche il titolo della finestra col nome del proprietario
-    this->setWindowTitle("Conto di: " + QString::fromStdString(myAccount->getOwnerName()));
+
+        ui->labelSaldo->setText("Saldo: " + QString::number(myAccount->getBalance()) + " EUR"); //aggiorna label saldo
+        ui->listTransactions->clear(); //pulisce x non avere duplicati
+
+        std::vector<Transaction> history = myAccount->getTransactionHistory(); // prende lo storico da bank account
+
+        //iteratore inverso per mostrare prima le più recenti
+        for (auto it = history.rbegin(); it != history.rend(); ++it) {
+            const Transaction& t = *it; // prende la transazione corrente
+
+            //mostra + o -
+            QString simbolo;
+            Qt::GlobalColor colore;
+
+            //controlla il tipo
+            if (t.getType() == Transaction::EXPENSE) {
+                simbolo = "[-]";
+                colore = Qt::red;
+            } else {
+                simbolo = "[+]";
+                colore = Qt::darkGreen;
+            }
+
+            //qAbs per mostra numero sempre positivo, il segno lo mette il simbolo sopra
+            QString testo = simbolo + " " +
+                            QString::number(std::abs(t.getAmount())) + " EUR | " +
+                            QString::fromStdString(t.getDescription());
+
+            //crea lista che verrà mostrata
+            QListWidgetItem* item = new QListWidgetItem(testo);
+            item->setForeground(colore);
+
+            // aggiunge la riga alla lista
+            ui->listTransactions->addItem(item);
+        }
 }
 
 void MainWindow::on_btnBonifico_clicked() {
