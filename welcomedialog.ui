@@ -13,30 +13,68 @@
   <property name="windowTitle">
    <string>WelcomeDialog</string>
   </property>
+  <property name="styleSheet">
+   <string notr="true"/>
+  </property>
   <widget class="QLabel" name="label">
    <property name="geometry">
     <rect>
-     <x>170</x>
+     <x>120</x>
      <y>10</y>
-     <width>171</width>
+     <width>251</width>
      <height>81</height>
     </rect>
    </property>
+   <property name="font">
+    <font>
+     <family>Helvetica</family>
+     <pointsize>24</pointsize>
+    </font>
+   </property>
+   <property name="styleSheet">
+    <string notr="true">color: #ffffff;</string>
+   </property>
    <property name="text">
     <string>Benvenuto nella Banca</string>
+   </property>
+   <property name="alignment">
+    <set>Qt::AlignmentFlag::AlignCenter</set>
    </property>
   </widget>
   <widget class="QPushButton" name="btnEnter">
    <property name="geometry">
     <rect>
      <x>170</x>
-     <y>230</y>
+     <y>240</y>
      <width>131</width>
      <height>71</height>
     </rect>
    </property>
+   <property name="font">
+    <font>
+     <family>Helvetica</family>
+     <pointsize>-1</pointsize>
+     <bold>true</bold>
+    </font>
+   </property>
+   <property name="styleSheet">
+    <string notr="true">QPushButton {
+    background-color: #90CAF9; /* blu*/
+    color: #444444;
+    border-radius: 15px;
+    padding: 10px 20px;
+    font-size: 18px;
+    border: none;
+}
+QPushButton:hover {
+    background-color: #64B5F6;
+}
+QPushButton:pressed {
+    background-color: #2196F3;
+}</string>
+   </property>
    <property name="text">
-    <string>accedi</string>
+    <string>Accedi</string>
    </property>
   </widget>
   <widget class="QLabel" name="label_3">
@@ -45,8 +83,14 @@
      <x>40</x>
      <y>110</y>
      <width>81</width>
-     <height>16</height>
+     <height>31</height>
     </rect>
+   </property>
+   <property name="font">
+    <font>
+     <family>Helvetica</family>
+     <pointsize>18</pointsize>
+    </font>
    </property>
    <property name="text">
     <string>Nome</string>
@@ -56,10 +100,26 @@
    <property name="geometry">
     <rect>
      <x>170</x>
-     <y>110</y>
-     <width>131</width>
-     <height>21</height>
+     <y>100</y>
+     <width>171</width>
+     <height>31</height>
     </rect>
+   </property>
+   <property name="font">
+    <font>
+     <family>Helvetica</family>
+     <pointsize>-1</pointsize>
+    </font>
+   </property>
+   <property name="styleSheet">
+    <string notr="true">QLineEdit {
+    background-color: #ffffff; 
+    color: #000000;           /* testo*/
+    border: 2px solid #cccccc; 
+    border-radius: 5px;        
+    padding: 5px;              /* spaziatura interna */
+    font-size: 16px;           
+}</string>
    </property>
   </widget>
   <widget class="QLabel" name="label_4">
@@ -67,9 +127,15 @@
     <rect>
      <x>40</x>
      <y>160</y>
-     <width>81</width>
-     <height>16</height>
+     <width>111</width>
+     <height>31</height>
     </rect>
+   </property>
+   <property name="font">
+    <font>
+     <family>Helvetica</family>
+     <pointsize>18</pointsize>
+    </font>
    </property>
    <property name="text">
     <string>Saldo iniziale</string>
@@ -80,9 +146,25 @@
     <rect>
      <x>170</x>
      <y>160</y>
-     <width>131</width>
-     <height>22</height>
+     <width>181</width>
+     <height>31</height>
     </rect>
+   </property>
+   <property name="font">
+    <font>
+     <family>Helvetica</family>
+     <pointsize>-1</pointsize>
+    </font>
+   </property>
+   <property name="styleSheet">
+    <string notr="true">QDoubleSpinBox {
+    background-color: #ffffff;
+    color: #000000; /* testo nero */
+    border: 2px solid #cccccc;
+    border-radius: 5px;
+    padding: 5px;
+    font-size: 16px;
+}</string>
    </property>
    <property name="maximum">
     <double>100000000000000.000000000000000</double>
