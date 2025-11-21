@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>432</width>
-    <height>438</height>
+    <width>457</width>
+    <height>373</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -16,7 +16,7 @@
   <widget class="QLabel" name="label">
    <property name="geometry">
     <rect>
-     <x>130</x>
+     <x>170</x>
      <y>10</y>
      <width>171</width>
      <height>81</height>
@@ -26,26 +26,13 @@
     <string>Benvenuto nella Banca</string>
    </property>
   </widget>
-  <widget class="QLabel" name="label_2">
-   <property name="geometry">
-    <rect>
-     <x>150</x>
-     <y>240</y>
-     <width>121</width>
-     <height>41</height>
-    </rect>
-   </property>
-   <property name="text">
-    <string>accedi al tuo conto</string>
-   </property>
-  </widget>
   <widget class="QPushButton" name="btnEnter">
    <property name="geometry">
     <rect>
-     <x>140</x>
-     <y>300</y>
+     <x>170</x>
+     <y>230</y>
      <width>131</width>
-     <height>91</height>
+     <height>71</height>
     </rect>
    </property>
    <property name="text">
@@ -62,7 +49,7 @@
     </rect>
    </property>
    <property name="text">
-    <string>il tuo nome</string>
+    <string>Nome</string>
    </property>
   </widget>
   <widget class="QLineEdit" name="editNome">
@@ -70,7 +57,7 @@
     <rect>
      <x>170</x>
      <y>110</y>
-     <width>113</width>
+     <width>131</width>
      <height>21</height>
     </rect>
    </property>
@@ -85,7 +72,7 @@
     </rect>
    </property>
    <property name="text">
-    <string>saldo iniziale</string>
+    <string>Saldo iniziale</string>
    </property>
   </widget>
   <widget class="QDoubleSpinBox" name="spinSaldo">

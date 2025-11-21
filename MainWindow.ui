@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>977</width>
-    <height>771</height>
+    <width>632</width>
+    <height>633</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -17,9 +17,9 @@
    <widget class="QSpinBox" name="spinBoxImporto">
     <property name="geometry">
      <rect>
-      <x>140</x>
-      <y>119</y>
-      <width>121</width>
+      <x>240</x>
+      <y>160</y>
+      <width>151</width>
       <height>61</height>
      </rect>
     </property>
@@ -30,8 +30,8 @@
    <widget class="QLabel" name="labelSaldo">
     <property name="geometry">
      <rect>
-      <x>140</x>
-      <y>9</y>
+      <x>190</x>
+      <y>20</y>
       <width>131</width>
       <height>41</height>
      </rect>
@@ -43,9 +43,9 @@
    <widget class="QPushButton" name="btnDeposita">
     <property name="geometry">
      <rect>
-      <x>290</x>
-      <y>69</y>
-      <width>131</width>
+      <x>220</x>
+      <y>270</y>
+      <width>191</width>
       <height>71</height>
      </rect>
     </property>
@@ -56,9 +56,9 @@
    <widget class="QPushButton" name="btnPreleva">
     <property name="geometry">
      <rect>
-      <x>290</x>
-      <y>160</y>
-      <width>131</width>
+      <x>10</x>
+      <y>270</y>
+      <width>191</width>
       <height>71</height>
      </rect>
     </property>
@@ -69,10 +69,10 @@
    <widget class="QPushButton" name="btnSave">
     <property name="geometry">
      <rect>
-      <x>30</x>
-      <y>480</y>
-      <width>171</width>
-      <height>31</height>
+      <x>10</x>
+      <y>520</y>
+      <width>281</width>
+      <height>41</height>
      </rect>
     </property>
     <property name="text">
@@ -82,10 +82,10 @@
    <widget class="QPushButton" name="btnLoad">
     <property name="geometry">
      <rect>
-      <x>320</x>
-      <y>480</y>
-      <width>181</width>
-      <height>31</height>
+      <x>340</x>
+      <y>520</y>
+      <width>281</width>
+      <height>41</height>
      </rect>
     </property>
     <property name="text">
@@ -95,9 +95,9 @@
    <widget class="QPushButton" name="btnBonifico">
     <property name="geometry">
      <rect>
-      <x>320</x>
-      <y>360</y>
-      <width>141</width>
+      <x>430</x>
+      <y>270</y>
+      <width>191</width>
       <height>41</height>
      </rect>
     </property>
@@ -108,8 +108,8 @@
    <widget class="QLineEdit" name="editDestinatario">
     <property name="geometry">
      <rect>
-      <x>30</x>
-      <y>370</y>
+      <x>430</x>
+      <y>310</y>
       <width>191</width>
       <height>31</height>
      </rect>
@@ -118,27 +118,40 @@
      <string>Nome Destinatario</string>
     </property>
    </widget>
-   <widget class="QLabel" name="labelSaldo_2">
+   <widget class="QListWidget" name="listTransactions">
     <property name="geometry">
      <rect>
-      <x>30</x>
-      <y>330</y>
-      <width>201</width>
+      <x>110</x>
+      <y>360</y>
+      <width>421</width>
+      <height>121</height>
+     </rect>
+    </property>
+   </widget>
+   <widget class="QLabel" name="labelSaldo_3">
+    <property name="geometry">
+     <rect>
+      <x>430</x>
+      <y>350</y>
+      <width>101</width>
       <height>41</height>
      </rect>
     </property>
     <property name="text">
-     <string>inserisci destinatario bonifico</string>
+     <string>I tuoi movimenti</string>
     </property>
    </widget>
-   <widget class="QListWidget" name="listTransactions">
+   <widget class="QLabel" name="labelSaldo_4">
     <property name="geometry">
      <rect>
-      <x>620</x>
-      <y>130</y>
-      <width>256</width>
-      <height>192</height>
+      <x>190</x>
+      <y>110</y>
+      <width>251</width>
+      <height>41</height>
      </rect>
+    </property>
+    <property name="text">
+     <string>Inserisci importo poi scegli l'operazione</string>
     </property>
    </widget>
   </widget>
@@ -147,7 +160,7 @@
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>977</width>
+     <width>632</width>
      <height>30</height>
     </rect>
    </property>
