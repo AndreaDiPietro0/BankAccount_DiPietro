@@ -13,12 +13,11 @@ class MainWindow : public QMainWindow {
 
 public:
     MainWindow(QString nome, double saldo, QWidget *parent = nullptr);
-    ~MainWindow();
+    ~MainWindow() override;
 
 private slots:
     void on_btnDeposita_clicked();
     void on_btnPreleva_clicked();
-
     void on_btnBonifico_clicked();
 
     void on_btnSave_clicked();

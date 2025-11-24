@@ -3,16 +3,15 @@
 //
 
 #include "BankAccount.h"
-
 #include <utility>
 
-BankAccount::BankAccount(std::string name, double initialBalance)
-        : ownerName(std::move(name)), balance(initialBalance) {
+BankAccount::BankAccount(std::string name, double initialBalance) : ownerName(std::move(name)), balance(initialBalance) {
 }
 
 double BankAccount::getBalance() const {
     return balance;
 }
+
 std::string BankAccount::getOwnerName() const {
     return ownerName;
 }
@@ -24,25 +23,23 @@ std::vector<Transaction> BankAccount::getTransactionHistory() const {
 void BankAccount::deposit(double amount) {
     if (amount <= 0) return;
     balance += amount;
-    addTransaction(amount, Transaction::INCOME, "Deposit");
+    addTransaction(amount, Transaction::INCOME, "Deposito");
 }
 
 bool BankAccount::withdraw(double amount) {
     if (amount <= 0 || balance < amount) return false;
     balance -= amount;
-    addTransaction(amount, Transaction::EXPENSE, "Withdrawal");
+    addTransaction(amount, Transaction::EXPENSE, "Prelievo");
     return true;
 }
 
-bool BankAccount::transfer(BankAccount& receiver, double amount) {
+bool BankAccount::transfer(BankAccount &receiver, double amount) {
     if (amount <= 0 || balance < amount) return false;
 
-    // levo soldi da questo conto
-    balance -= amount;
-    addTransaction(amount, Transaction::EXPENSE, "Transfer to " + receiver.getOwnerName());
+    balance -= amount;     // levo soldi da questo conto
+    addTransaction(amount, Transaction::EXPENSE, "Bonifico a " + receiver.getOwnerName());
 
-    // aggiungo soldi all'altro conto con deposit() dell'altro conto per semplicità
-    receiver.deposit(amount);
+    receiver.deposit(amount);     //per aggiungere soldi all'altro conto uso il metodo deposit()
 
     return true;
 }

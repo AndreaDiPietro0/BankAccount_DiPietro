@@ -7,16 +7,12 @@
 #include <vector>
 #include "Transaction.h"
 
-MainWindow::MainWindow(QString nome, double saldo, QWidget *parent)
-        : QMainWindow(parent)
-        , ui(new Ui::MainWindow)
-{
+MainWindow::MainWindow(QString nome, double saldo, QWidget *parent) : QMainWindow(parent), ui(new Ui::MainWindow) {
     ui->setupUi(this);
     ui->spinBoxImporto->setMaximum(10000000.0);
 
     //ui->editDestinatario->setPlaceholderText("Nome Destinatario");
-    // nome di default se vuoto
-    if(nome.isEmpty()) nome = "Guest User";
+    if (nome.isEmpty()) nome = "Guest User"; // nome di default se vuoto
 
     myAccount = new BankAccount(nome.toStdString(), saldo);
 
@@ -29,8 +25,7 @@ MainWindow::~MainWindow() {
 }
 
 void MainWindow::on_btnDeposita_clicked() {
-    // prende il valore dalla SpinBox
-    double importo = ui->spinBoxImporto->value();
+    double importo = ui->spinBoxImporto->value(); // prende il valore dalla spinbox
     myAccount->deposit(importo);
     aggiornaInterfaccia();
 }
@@ -38,13 +33,13 @@ void MainWindow::on_btnDeposita_clicked() {
 void MainWindow::on_btnPreleva_clicked() {
     double importo = ui->spinBoxImporto->value();
     if (!myAccount->withdraw(importo)) {
-        QMessageBox::warning(this, "Errore", "Fondi insufficienti!");
+        QMessageBox::warning(this, "Errore", "Fondi insufficienti!"); // il messaggio èmostrato in una nuova finestra
     }
     aggiornaInterfaccia();
 }
 
 void MainWindow::on_btnSave_clicked() {
-    // chiede all'utente dove salvare (apre il Finder)
+    // chiede all'utente dove salvare (apre il finder)
     QString fileName = QFileDialog::getSaveFileName(this, "Salva Conto", "", "Text Files (*.txt)");
 
     if (fileName.isEmpty()) return; // se l'utente preme Annulla
@@ -55,9 +50,8 @@ void MainWindow::on_btnSave_clicked() {
         return;
     }
 
-    // scrive i dati nel file
-    QTextStream out(&file);
-    // scrive su due righe: prima il nome poi il saldo
+    QTextStream out(&file); // scrive i dati nel file
+    // scrive su due righe prima il nome poi il saldo
     out << QString::fromStdString(myAccount->getOwnerName()) << "\n";
     out << myAccount->getBalance() << "\n";
 
@@ -79,8 +73,7 @@ void MainWindow::on_btnLoad_clicked() {
 
     QTextStream in(&file);
 
-    // legge i dati riga per riga
-    QString nome = in.readLine();
+    QString nome = in.readLine();// legge i dati riga per riga
     QString saldoStr = in.readLine();
 
     // coverte la stringa del saldo in numero
@@ -88,11 +81,11 @@ void MainWindow::on_btnLoad_clicked() {
     double saldo = saldoStr.toDouble(&ok);
 
     if (!ok) {
-        QMessageBox::warning(this, "Errore", "Il file è corrotto o il formato non è valido.");
+        QMessageBox::warning(this, "Errore", "Il file è sbagliato o il formato non è valido.");
         return;
     }
 
-    // sostituisce il vecchio oggetto BankAccount con quello nuovo
+    // sostituisce il vecchio oggetto bankaccount con quello nuovo
     delete myAccount; // cancella quello vecchio dalla memoria
     myAccount = new BankAccount(nome.toStdString(), saldo);
 
@@ -103,69 +96,67 @@ void MainWindow::on_btnLoad_clicked() {
 
 void MainWindow::aggiornaInterfaccia() {
 
-        ui->labelSaldo->setText("Saldo: " + QString::number(myAccount->getBalance()) + " EUR"); //aggiorna label saldo
-        ui->listTransactions->clear(); //pulisce x non avere duplicati
+    ui->labelSaldo->setText("Saldo: " + QString::number(myAccount->getBalance()) + " EURO"); //aggiorna label saldo
+    ui->listTransactions->clear(); //pulisce x non avere duplicati
 
-        std::vector<Transaction> history = myAccount->getTransactionHistory(); // prende lo storico da bank account
+    std::vector<Transaction> history = myAccount->getTransactionHistory(); // prende lo storico da bank account
 
-        //iteratore inverso per mostrare prima le più recenti
-        for (auto it = history.rbegin(); it != history.rend(); ++it) {
-            const Transaction& t = *it; // prende la transazione corrente
+    //iteratore inverso per mostrare prima le più recenti
+    for (auto it = history.rbegin(); it != history.rend(); ++it) {
+        const Transaction &t = *it; // prende la transazione corrente
 
-            //mostra + o -
-            QString simbolo;
-            Qt::GlobalColor colore;
+        //mostra + o -
+        QString simbolo;
+        Qt::GlobalColor colore;
 
-            //controlla il tipo
-            if (t.getType() == Transaction::EXPENSE) {
-                simbolo = "[-]";
-                colore = Qt::red;
-            } else {
-                simbolo = "[+]";
-                colore = Qt::darkGreen;
-            }
-
-            //qAbs per mostra numero sempre positivo, il segno lo mette il simbolo sopra
-            QString testo = simbolo + " " +
-                            QString::number(std::abs(t.getAmount())) + " EUR | " +
-                            QString::fromStdString(t.getDescription());
-
-            //crea lista che verrà mostrata
-            QListWidgetItem* item = new QListWidgetItem(testo);
-            item->setForeground(colore);
-
-            // aggiunge la riga alla lista
-            ui->listTransactions->addItem(item);
+        //controlla il tipo
+        if (t.getType() == Transaction::EXPENSE) {
+            simbolo = "[-]";
+            colore = Qt::red;
+        } else {
+            simbolo = "[+]";
+            colore = Qt::darkGreen;
         }
+
+        //qAbs mostra numero sempre positivo, il segno lo mette il simbolo sopra
+        QString testo = simbolo + " " +
+                        QString::number(std::abs(t.getAmount())) + " EURO | " +
+                        QString::fromStdString(t.getDescription());
+
+        //crea lista che verrà mostrata
+        QListWidgetItem *item = new QListWidgetItem(testo);
+        item->setForeground(colore);
+
+        ui->listTransactions->addItem(item); // aggiunge la riga alla lista
+
+    }
 }
 
 void MainWindow::on_btnBonifico_clicked() {
-    //prende l'importo dalla stessa casella
-    double importo = ui->spinBoxImporto->value();
 
-    //prende nome
-    QString destinatario = ui->editDestinatario->text();
+    double importo = ui->spinBoxImporto->value();  //prende l'importo dalla stessa casella
+
+    QString destinatario = ui->editDestinatario->text();  //prende nome
 
     //nome non vuoto
     if (destinatario.isEmpty()) {
-        QMessageBox::warning(this, "Errore", "Devi inserire il nome del destinatario!");
+        QMessageBox::warning(this, "Errore", "inserisci il nome del destinatario");
         return;
     }
 
     //conto x destinatario
     BankAccount contoDestinatario(destinatario.toStdString(), 0.0);
 
-    //bonifico transfer  TRUE se funziona, FALSE se soldi non bastano
+    //bonifico TRUE se funziona, FALSE se soldi non bastano
     bool esito = myAccount->transfer(contoDestinatario, importo);
 
     if (esito) {
-        QMessageBox::information(this, "Successo",
-                                 "Bonifico di " + QString::number(importo) + "€ inviato a " + destinatario);
+        QMessageBox::information(this, "Successo","Bonifico di " + QString::number(importo) + "€ inviato a " + destinatario);
 
         //cancella nome
         ui->editDestinatario->clear();
     } else {
-        QMessageBox::warning(this, "Errore", "Fondi insufficienti per il bonifico!");
+        QMessageBox::warning(this, "Errore", "Fondi insufficienti per il bonifico");
     }
 
     // aggiorna saldo

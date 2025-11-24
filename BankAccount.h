@@ -14,20 +14,23 @@ public:
     explicit BankAccount(std::string ownerName, double initialBalance = 0.0);
 
     double getBalance() const;
+
     std::string getOwnerName() const;
+
     std::vector<Transaction> getTransactionHistory() const;
 
-    // operazioni possibili
     void deposit(double amount);
+
     bool withdraw(double amount);
-    bool transfer(BankAccount& receiver, double amount);
+
+    bool transfer(BankAccount &receiver, double amount);
 
 private:
     std::string ownerName;
     double balance;
     std::vector<Transaction> transactions; // storico movimenti
 
-    // metodo helper privato per registrare la transazione
+    // metodo privato per registrare la transazione
     void addTransaction(double amount, Transaction::Type type, std::string description);
 };
 
