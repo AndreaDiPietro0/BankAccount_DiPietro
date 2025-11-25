@@ -39,13 +39,13 @@ void MainWindow::on_btnPreleva_clicked() {
 }
 
 void MainWindow::on_btnSave_clicked() {
-    // chiede all'utente dove salvare (apre il finder)
-    QString fileName = QFileDialog::getSaveFileName(this, "Salva Conto", "", "Text Files (*.txt)");
+    // chiede all'utente dove salvare
+    QString fileName = QFileDialog::getSaveFileName(this, "Salva Conto", "","Text Files (*.txt)"); // this perchè si apre una finestra figlia
 
-    if (fileName.isEmpty()) return; // se l'utente preme Annulla
+    if (fileName.isEmpty()) return; // se l'utente preme annulla
 
     QFile file(fileName);
-    if (!file.open(QIODevice::WriteOnly | QIODevice::Text)) {
+    if (!file.open(QIODevice::WriteOnly | QIODevice::Text)) { //file sono x scrittura | tratta file di testo
         QMessageBox::critical(this, "Errore", "Impossibile salvare il file!");
         return;
     }
@@ -76,7 +76,7 @@ void MainWindow::on_btnLoad_clicked() {
     QString nome = in.readLine();// legge i dati riga per riga
     QString saldoStr = in.readLine();
 
-    // coverte la stringa del saldo in numero
+    // converte la stringa del saldo in numero
     bool ok;
     double saldo = saldoStr.toDouble(&ok);
 

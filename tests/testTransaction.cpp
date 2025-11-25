@@ -18,8 +18,7 @@ Transaction t(50.0, Transaction::EXPENSE, "Spesa");
 
 std::string date = t.getDate();
 
-// controlla che la stringa non sia vuota e che sia lunga il giusto
-ASSERT_FALSE(date.empty());
+ASSERT_FALSE(date.empty()); // controlla che la stringa non sia vuota e che sia lunga il giusto
 ASSERT_GT(date.length(), 10); // GT = Greater Than (Maggiore di)
 }
 

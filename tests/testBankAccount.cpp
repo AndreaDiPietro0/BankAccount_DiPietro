@@ -5,23 +5,21 @@
 #include "gtest/gtest.h"
 #include "../BankAccount.h" // Torniamo indietro di una cartella per trovare l'header
 
-// --- FIXTURE CLASS ---
-// classe x  creare un ambiente comune per i test.
+// classe x creare un ambiente comune per i test
 class BankAccountTest : public ::testing::Test {
 protected:
     //  eseguito prima di ogni singolo TEST_F
     void SetUp() override {
-        account = new BankAccount("Test User", 100.0); // Saldo iniziale 100
+        account = new BankAccount("Test User", 100.0); // saldo iniziale 100
     }
 
-    //  eseguito opo ogni singolo TEST_F
+    //  eseguito dopo ogni singolo TEST_F x pulizia dopo che è stato eseguito il test
     void TearDown() override {
         delete account;
     }
 
-    BankAccount* account; // Puntatore all'oggetto da testare
+    BankAccount* account; // puntatore all'oggetto da testare
 };
-
 
 // test costruttore
 TEST_F(BankAccountTest, InitialBalanceCheck) {
