@@ -12,7 +12,7 @@ class MainWindow : public QMainWindow {
     Q_OBJECT
 
 public:
-    MainWindow(QString nome, double saldo, QWidget *parent = nullptr);
+    MainWindow(QString nome, double saldo, QString iban = "", QWidget *parent = nullptr);
     ~MainWindow() override;
 
 private slots:

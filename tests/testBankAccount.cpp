@@ -57,7 +57,7 @@ ASSERT_EQ(account->getBalance(), 100.0); //  saldo non deve cambiare
 TEST_F(BankAccountTest, TransferSuccess) {
 BankAccount secondAccount("Receiver", 0.0);
 
-bool result = account->transfer(secondAccount, 30.0);
+bool result = account->transfer(secondAccount, 30.0, std::string());
 
 ASSERT_TRUE(result);
 ASSERT_EQ(account->getBalance(), 70.0); // 100 - 30

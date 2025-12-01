@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>632</width>
-    <height>633</height>
+    <width>671</width>
+    <height>684</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -17,9 +17,9 @@
    <widget class="QLabel" name="labelSaldo">
     <property name="geometry">
      <rect>
-      <x>170</x>
+      <x>140</x>
       <y>0</y>
-      <width>301</width>
+      <width>341</width>
       <height>51</height>
      </rect>
     </property>
@@ -53,7 +53,7 @@
       <x>220</x>
       <y>230</y>
       <width>191</width>
-      <height>71</height>
+      <height>81</height>
      </rect>
     </property>
     <property name="font">
@@ -90,7 +90,7 @@ QPushButton:pressed {
       <x>10</x>
       <y>230</y>
       <width>191</width>
-      <height>71</height>
+      <height>81</height>
      </rect>
     </property>
     <property name="font">
@@ -125,7 +125,7 @@ QPushButton:pressed {
     <property name="geometry">
      <rect>
       <x>10</x>
-      <y>520</y>
+      <y>560</y>
       <width>281</width>
       <height>41</height>
      </rect>
@@ -162,7 +162,7 @@ QPushButton:pressed {
     <property name="geometry">
      <rect>
       <x>340</x>
-      <y>520</y>
+      <y>560</y>
       <width>281</width>
       <height>41</height>
      </rect>
@@ -254,7 +254,7 @@ QPushButton:pressed {
     <property name="geometry">
      <rect>
       <x>110</x>
-      <y>360</y>
+      <y>410</y>
       <width>421</width>
       <height>121</height>
      </rect>
@@ -287,7 +287,7 @@ QListWidget::item:selected {
     <property name="geometry">
      <rect>
       <x>260</x>
-      <y>330</y>
+      <y>360</y>
       <width>121</width>
       <height>41</height>
      </rect>
@@ -317,7 +317,7 @@ QListWidget::item:selected {
     <property name="geometry">
      <rect>
       <x>180</x>
-      <y>70</y>
+      <y>90</y>
       <width>371</width>
       <height>41</height>
      </rect>
@@ -347,7 +347,7 @@ QListWidget::item:selected {
     <property name="geometry">
      <rect>
       <x>230</x>
-      <y>120</y>
+      <y>140</y>
       <width>181</width>
       <height>51</height>
      </rect>
@@ -358,13 +358,63 @@ QListWidget::item:selected {
      </font>
     </property>
    </widget>
+   <widget class="QLabel" name="labelIban">
+    <property name="geometry">
+     <rect>
+      <x>190</x>
+      <y>50</y>
+      <width>371</width>
+      <height>41</height>
+     </rect>
+    </property>
+    <property name="font">
+     <font>
+      <family>Arial</family>
+      <bold>true</bold>
+     </font>
+    </property>
+    <property name="styleSheet">
+     <string notr="true">QLabel#labeInsImp{ 
+    color: white; 
+    font-family: &quot;Arial&quot;, sans-serif; /* Tipo di font */
+    font-size: 14px; /* Grande */
+    font-weight: bold; /* Grassetto */
+    padding: 5px; /* Spaziatura interna */
+    border-bottom: 2px solid #cccccc; /* Sottolineatura grigia */
+}</string>
+    </property>
+    <property name="text">
+     <string>IBAN</string>
+    </property>
+   </widget>
+   <widget class="QLineEdit" name="editIbanDestinatario">
+    <property name="geometry">
+     <rect>
+      <x>430</x>
+      <y>320</y>
+      <width>191</width>
+      <height>31</height>
+     </rect>
+    </property>
+    <property name="font">
+     <font>
+      <family>Helvetica</family>
+     </font>
+    </property>
+    <property name="text">
+     <string/>
+    </property>
+    <property name="placeholderText">
+     <string>Iban Destinatario</string>
+    </property>
+   </widget>
   </widget>
   <widget class="QMenuBar" name="menubar">
    <property name="geometry">
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>632</width>
+     <width>671</width>
      <height>30</height>
     </rect>
    </property>

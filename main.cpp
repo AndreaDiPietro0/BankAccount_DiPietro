@@ -13,9 +13,10 @@ int main(int argc, char *argv[]) {
         // prende dati inseriti
         QString nomeScelto = welcome.getNome();
         double saldoScelto = welcome.getSaldo();
+        QString ibanScelto = welcome.getIban();
 
         // crea la finestra principale con quei dati
-        MainWindow w(nomeScelto, saldoScelto);
+        MainWindow w(nomeScelto, saldoScelto, ibanScelto);
         w.show();
 
         return a.exec();

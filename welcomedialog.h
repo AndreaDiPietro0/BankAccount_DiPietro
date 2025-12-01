@@ -23,6 +23,8 @@ public:
     QString getNome() const;
     double getSaldo() const;
 
+    QString getIban() const;
+
 private:
     Ui::WelcomeDialog *ui;
 };

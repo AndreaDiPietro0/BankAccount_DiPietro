@@ -15,7 +15,7 @@ public:
         INCOME, EXPENSE
     };
 
-    Transaction(double amount, Type type, std::string description);
+    explicit Transaction(double amount, Type type, std::string description);
 
     double getAmount() const;
 

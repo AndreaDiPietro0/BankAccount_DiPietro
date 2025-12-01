@@ -11,7 +11,7 @@
 
 class BankAccount {
 public:
-    explicit BankAccount(std::string ownerName, double initialBalance = 0.0);
+    explicit BankAccount(std::string ownerName, double initialBalance = 0.0, std::string iban = "");
 
     double getBalance() const;
 
@@ -19,19 +19,23 @@ public:
 
     std::vector<Transaction> getTransactionHistory() const;
 
-    void deposit(double amount);
+    void deposit(double amount, std::string description = "Deposito");
+    bool withdraw(double amount, std::string description = "Prelievo");
 
-    bool withdraw(double amount);
+    bool transfer(double amount, const std::string& recipientIban, const std::string& recipientName);
+    std::string getIban() const;
 
-    bool transfer(BankAccount &receiver, double amount);
+    void setIban(const std::string &newIban);
 
 private:
     std::string ownerName;
     double balance;
+    std::string iban;
     std::vector<Transaction> transactions; // storico movimenti
 
     // metodo privato per registrare la transazione
-    void addTransaction(double amount, Transaction::Type type, std::string description);
+    //void addTransaction(Transaction(double amount, Transaction::Type type, std::string description));
+    void addTransaction(const Transaction& transaction);
 };
 
 

@@ -5,9 +5,7 @@
 #include "welcomedialog.h"
 #include "ui_WelcomeDialog.h"
 
-WelcomeDialog::WelcomeDialog(QWidget *parent) :
-        QDialog(parent),
-        ui(new Ui::WelcomeDialog) {
+WelcomeDialog::WelcomeDialog(QWidget *parent) : QDialog(parent), ui(new Ui::WelcomeDialog) {
     ui->setupUi(this);
     ui->spinSaldo->setValue(0.0);
 
@@ -25,4 +23,8 @@ QString WelcomeDialog::getNome() const {
 
 double WelcomeDialog::getSaldo() const {
     return ui->spinSaldo->value();
+}
+
+QString WelcomeDialog::getIban() const {
+    return ui->editIban->text();
 }

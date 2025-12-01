@@ -7,15 +7,15 @@
 #include <vector>
 #include "Transaction.h"
 
-MainWindow::MainWindow(QString nome, double saldo, QWidget *parent) : QMainWindow(parent), ui(new Ui::MainWindow) {
+MainWindow::MainWindow(QString nome, double saldo, QString iban, QWidget *parent) : QMainWindow(parent), ui(new Ui::MainWindow) {
     ui->setupUi(this);
     ui->spinBoxImporto->setMaximum(10000000.0);
 
     //ui->editDestinatario->setPlaceholderText("Nome Destinatario");
     if (nome.isEmpty()) nome = "Guest User"; // nome di default se vuoto
 
-    myAccount = new BankAccount(nome.toStdString(), saldo);
-
+    myAccount = new BankAccount(nome.toStdString(), saldo, iban.toStdString());
+    ui->labelIban->setText("IBAN: N/D"); // testo predefinito prima del primo aggiornamento
     aggiornaInterfaccia();
 }
 
@@ -98,7 +98,7 @@ void MainWindow::aggiornaInterfaccia() {
 
     ui->labelSaldo->setText("Saldo: " + QString::number(myAccount->getBalance()) + " EURO"); //aggiorna label saldo
     ui->listTransactions->clear(); //pulisce x non avere duplicati
-
+    ui->labelIban->setText("IBAN: " + QString::fromStdString(myAccount->getIban()));
     std::vector<Transaction> history = myAccount->getTransactionHistory(); // prende lo storico da bank account
 
     //iteratore inverso per mostrare prima le più recenti
@@ -136,29 +136,49 @@ void MainWindow::on_btnBonifico_clicked() {
 
     double importo = ui->spinBoxImporto->value();  //prende l'importo dalla stessa casella
 
-    QString destinatario = ui->editDestinatario->text();  //prende nome
+    QString destinatarioNome = ui->editDestinatario->text();  //prende nome
+
+    QString destinatarioIban = ui->editIbanDestinatario->text();
 
     //nome non vuoto
-    if (destinatario.isEmpty()) {
+    if (destinatarioNome.isEmpty()) {
         QMessageBox::warning(this, "Errore", "inserisci il nome del destinatario");
         return;
     }
 
+    if (destinatarioIban.isEmpty()) {
+        QMessageBox::warning(this, "Errore", "Inserisci l'IBAN del destinatario!");
+        return;
+    }
+    /*
     //conto x destinatario
-    BankAccount contoDestinatario(destinatario.toStdString(), 0.0);
+    BankAccount contoDestinatario(destinatarioNome.toStdString(), 0.0);
 
     //bonifico TRUE se funziona, FALSE se soldi non bastano
     bool esito = myAccount->transfer(contoDestinatario, importo);
 
     if (esito) {
-        QMessageBox::information(this, "Successo","Bonifico di " + QString::number(importo) + "€ inviato a " + destinatario);
+        QMessageBox::information(this, "Successo","Bonifico di " + QString::number(importo) + "€ inviato a " + destinatarioNome);
 
         //cancella nome
         ui->editDestinatario->clear();
     } else {
         QMessageBox::warning(this, "Errore", "Fondi insufficienti per il bonifico");
     }
+*/
 
+    bool esito = myAccount->transfer(importo, destinatarioIban.toStdString(), destinatarioNome.toStdString());
+
+    if (esito) {
+        QMessageBox::information(this, "Successo", "Bonifico di " + QString::number(importo, 'f', 2) + " EUR inviato a " + destinatarioNome + " (" + destinatarioIban + ")");
+
+        // Cancella i campi dopo il successo
+        ui->editDestinatario->clear();
+        ui->editIbanDestinatario->clear();
+        ui->spinBoxImporto->setValue(0.0); // Resetta anche l'importo
+    } else {
+        QMessageBox::warning(this, "Errore Bonifico", "Fondi insufficienti per il bonifico!");
+    }
     // aggiorna saldo
     aggiornaInterfaccia();
 }
