@@ -6,6 +6,7 @@
 #include <QTextStream>  // scrivere testo nel file
 #include <vector>
 #include "Transaction.h"
+#include "transferdialog.h"
 
 MainWindow::MainWindow(QString nome, double saldo, QString iban, QWidget *parent) : QMainWindow(parent), ui(new Ui::MainWindow) {
     ui->setupUi(this);
@@ -151,66 +152,45 @@ void MainWindow::aggiornaInterfaccia() {
 }
 
 void MainWindow::on_btnBonifico_clicked() {
-    double importo = ui->spinBoxImporto->value();
-    QString destinatarioNome = ui->editDestinatario->text();
-    QString destinatarioIban = ui->editIbanDestinatario->text();
+    TransferDialog dialog(this);
 
-    if (importo <= 0) {
-        QMessageBox::warning(this, "Errore", "importo negativo");
-        return;
-    }
-    if (destinatarioNome.isEmpty()) {
-        QMessageBox::warning(this, "Errore", "Inserisci il nome del destinatario");
-        return;
-    }
-    if (destinatarioIban.isEmpty()) {
-        QMessageBox::warning(this, "Errore", "Inserisci l'IBAN del destinatario");
-        return;
-    }
+    dialog.setContacts(allAccounts, myAccount->getIban());     //passa lista di tutti i conti
 
-    if (destinatarioIban.toStdString() == myAccount->getIban()) {
-        QMessageBox::warning(this, "Errore", "impossibile fare un bonifico a se stesso");
-        return;
-    }
+    if (dialog.exec() == QDialog::Accepted) { // Mostra finestra e aspetta
 
-    //cerca il destinatario nella lista dei conti
-    BankAccount* contoDestinatario = nullptr; //si considera che non esista nel sistema
+        // se premo ok recupera i dati
+        double importo = dialog.getAmount();
+        QString destNome = dialog.getName();
+        QString destIban = dialog.getIban();
 
-    for (BankAccount* account : allAccounts) {
-        if (account->getIban() == destinatarioIban.toStdString()) {
-            contoDestinatario = account;
-            break;
+        // cerca destinatario interno
+        BankAccount* contoDestinatario = nullptr;
+        for (BankAccount* account : allAccounts) {
+            if (account->getIban() == destIban.toStdString()) {
+                contoDestinatario = account;
+                break;
+            }
         }
-    }
 
-    bool esito = myAccount->transfer(importo, destinatarioIban.toStdString(), destinatarioNome.toStdString());
+        // bonifico
+        bool esito = myAccount->transfer(importo, destIban.toStdString(), destNome.toStdString());
 
-    if (esito) {
-        if (contoDestinatario != nullptr) {
-            // se destinatario è nostro cliente versa soldi anche a lui
-            std::string descrizioneVersamento = "Bonifico da " + myAccount->getOwnerName() + " (IBAN: " + myAccount->getIban() + ")";
-            contoDestinatario->deposit(importo, descrizioneVersamento);
-
-            QMessageBox::information(this, "Successo",
-                                     "Bonifico interno eseguito\n" +
-                                     QString::number(importo, 'f', 2) + " EUR inviati a " + destinatarioNome + ".\n" +
-                                     "(Soldi accreditati sul conto destinatario)");
+        if (esito) {
+            if (contoDestinatario != nullptr) {
+                // bonifico interno
+                std::string desc = "Bonifico da " + myAccount->getOwnerName() + " (IBAN: " + myAccount->getIban() + ")";
+                contoDestinatario->deposit(importo, desc);
+                QMessageBox::information(this, "Fatto", "Bonifico interno inviato a " + destNome);
+            } else {
+                // bonifico esterno
+                QMessageBox::information(this, "Fatto", "Bonifico esterno inviato a " + destNome);
+            }
         } else {
-            // se destinatario non è nella nostra lista i soldi spariscono dal mio conto e basta.
-            QMessageBox::information(this, "Successo",
-                                     "Bonifico esterno inviato\n" +
-                                     QString::number(importo, 'f', 2) + " EUR inviati a " + destinatarioNome + " (" + destinatarioIban + ")");
+            QMessageBox::warning(this, "Errore", "Fondi insufficienti");
         }
 
-        ui->editDestinatario->clear();
-        ui->editIbanDestinatario->clear();
-        ui->spinBoxImporto->setValue(0.0);
-
-    } else {
-        QMessageBox::warning(this, "Errore Bonifico", "soldi insufficienti per il bonifico");
+        aggiornaInterfaccia();
     }
-
-    aggiornaInterfaccia();
 }
 
 void MainWindow::on_btnImporta_clicked() {

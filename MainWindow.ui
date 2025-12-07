@@ -232,24 +232,6 @@ QPushButton:pressed {
      <string>Invia bonifico</string>
     </property>
    </widget>
-   <widget class="QLineEdit" name="editDestinatario">
-    <property name="geometry">
-     <rect>
-      <x>430</x>
-      <y>280</y>
-      <width>191</width>
-      <height>31</height>
-     </rect>
-    </property>
-    <property name="font">
-     <font>
-      <family>Helvetica</family>
-     </font>
-    </property>
-    <property name="placeholderText">
-     <string>Nome Destinatario</string>
-    </property>
-   </widget>
    <widget class="QListWidget" name="listTransactions">
     <property name="geometry">
      <rect>
@@ -387,27 +369,6 @@ QListWidget::item:selected {
      <string>IBAN</string>
     </property>
    </widget>
-   <widget class="QLineEdit" name="editIbanDestinatario">
-    <property name="geometry">
-     <rect>
-      <x>430</x>
-      <y>320</y>
-      <width>191</width>
-      <height>31</height>
-     </rect>
-    </property>
-    <property name="font">
-     <font>
-      <family>Helvetica</family>
-     </font>
-    </property>
-    <property name="text">
-     <string/>
-    </property>
-    <property name="placeholderText">
-     <string>Iban Destinatario</string>
-    </property>
-   </widget>
    <widget class="QPushButton" name="btnImporta">
     <property name="geometry">
      <rect>
@@ -420,13 +381,12 @@ QListWidget::item:selected {
     <property name="font">
      <font>
       <family>Helvetica</family>
-      <pointsize>-1</pointsize>
       <bold>true</bold>
      </font>
     </property>
     <property name="styleSheet">
      <string notr="true">QPushButton {
-    background-color: #000000; /* verde */
+    background-color: #000000
     color: #444444;             
     border-radius: 15px;       /* bordi arrotondati */
     padding: 10px 20px;       /* spaziatura interna */

@@ -19,6 +19,9 @@ add_executable(BankAccount
         welcomedialog.cpp
         welcomedialog.h
         welcomedialog.ui
+        transferdialog.cpp
+        transferdialog.h
+        transferdialog.ui
 )
 target_link_libraries(BankAccount PRIVATE Qt6::Widgets BankCore)
 
