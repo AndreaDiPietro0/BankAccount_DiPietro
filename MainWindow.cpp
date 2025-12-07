@@ -11,7 +11,6 @@ MainWindow::MainWindow(QString nome, double saldo, QString iban, QWidget *parent
     ui->setupUi(this);
     ui->spinBoxImporto->setMaximum(10000000.0);
 
-    //ui->editDestinatario->setPlaceholderText("Nome Destinatario");
     if (nome.isEmpty()) nome = "Guest User"; // nome di default se vuoto
 
     myAccount = new BankAccount(nome.toStdString(), saldo, iban.toStdString());
@@ -46,7 +45,7 @@ void MainWindow::on_btnSave_clicked() {
 
     QFile file(fileName);
     if (!file.open(QIODevice::WriteOnly | QIODevice::Text)) { //file sono x scrittura | tratta file di testo
-        QMessageBox::critical(this, "Errore", "Impossibile salvare il file!");
+        QMessageBox::critical(this, "Errore", "Impossibile salvare il file");
         return;
     }
 
@@ -54,9 +53,10 @@ void MainWindow::on_btnSave_clicked() {
     // scrive su due righe prima il nome poi il saldo
     out << QString::fromStdString(myAccount->getOwnerName()) << "\n";
     out << myAccount->getBalance() << "\n";
+    out << QString::fromStdString(myAccount->getIban()) << "\n";
 
     file.close();
-    QMessageBox::information(this, "Successo", "Dati salvati correttamente!");
+    QMessageBox::information(this, "Successo", "Dati salvati correttamente");
 }
 
 void MainWindow::on_btnLoad_clicked() {
@@ -67,7 +67,7 @@ void MainWindow::on_btnLoad_clicked() {
 
     QFile file(fileName);
     if (!file.open(QIODevice::ReadOnly | QIODevice::Text)) {
-        QMessageBox::critical(this, "Errore", "Impossibile aprire il file!");
+        QMessageBox::critical(this, "Errore", "Impossibile aprire il file");
         return;
     }
 
@@ -75,23 +75,24 @@ void MainWindow::on_btnLoad_clicked() {
 
     QString nome = in.readLine();// legge i dati riga per riga
     QString saldoStr = in.readLine();
+    QString ibanLetto = in.readLine();
 
     // converte la stringa del saldo in numero
     bool ok;
     double saldo = saldoStr.toDouble(&ok);
 
     if (!ok) {
-        QMessageBox::warning(this, "Errore", "Il file è sbagliato o il formato non è valido.");
+        QMessageBox::warning(this, "Errore", "Il file è sbagliato o il formato non è valido");
         return;
     }
 
     // sostituisce il vecchio oggetto bankaccount con quello nuovo
     delete myAccount; // cancella quello vecchio dalla memoria
-    myAccount = new BankAccount(nome.toStdString(), saldo);
+    myAccount = new BankAccount(nome.toStdString(), saldo, ibanLetto.toStdString());
 
     file.close();
     aggiornaInterfaccia();
-    QMessageBox::information(this, "Successo", "Conto caricato!");
+    QMessageBox::information(this, "Successo", "Conto caricato");
 }
 
 void MainWindow::aggiornaInterfaccia() {
@@ -150,22 +151,6 @@ void MainWindow::on_btnBonifico_clicked() {
         QMessageBox::warning(this, "Errore", "Inserisci l'IBAN del destinatario!");
         return;
     }
-    /*
-    //conto x destinatario
-    BankAccount contoDestinatario(destinatarioNome.toStdString(), 0.0);
-
-    //bonifico TRUE se funziona, FALSE se soldi non bastano
-    bool esito = myAccount->transfer(contoDestinatario, importo);
-
-    if (esito) {
-        QMessageBox::information(this, "Successo","Bonifico di " + QString::number(importo) + "€ inviato a " + destinatarioNome);
-
-        //cancella nome
-        ui->editDestinatario->clear();
-    } else {
-        QMessageBox::warning(this, "Errore", "Fondi insufficienti per il bonifico");
-    }
-*/
 
     bool esito = myAccount->transfer(importo, destinatarioIban.toStdString(), destinatarioNome.toStdString());
 

@@ -34,7 +34,6 @@ private:
     std::vector<Transaction> transactions; // storico movimenti
 
     // metodo privato per registrare la transazione
-    //void addTransaction(Transaction(double amount, Transaction::Type type, std::string description));
     void addTransaction(const Transaction& transaction);
 };
 
