@@ -45,6 +45,9 @@
      <height>41</height>
     </rect>
    </property>
+   <property name="maximum">
+    <double>9999999999999.000000000000000</double>
+   </property>
   </widget>
   <widget class="QLineEdit" name="editNome">
    <property name="geometry">

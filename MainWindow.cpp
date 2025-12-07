@@ -17,11 +17,6 @@ MainWindow::MainWindow(QString nome, double saldo, QString iban, QWidget *parent
     myAccount = new BankAccount(nome.toStdString(), saldo, iban.toStdString());
 
     allAccounts.push_back(myAccount);
-
-    //account test x testare bonifici
-    BankAccount* accountAmico = new BankAccount("Luigi Verdi", 500.0, "IT00TESTAMICO");
-    allAccounts.push_back(accountAmico);
-
     ui->labelIban->setText("IBAN: N/D"); // testo predefinito prima del primo aggiornamento
     aggiornaInterfaccia();
 }
