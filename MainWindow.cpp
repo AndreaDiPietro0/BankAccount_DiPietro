@@ -14,12 +14,23 @@ MainWindow::MainWindow(QString nome, double saldo, QString iban, QWidget *parent
     if (nome.isEmpty()) nome = "Guest User"; // nome di default se vuoto
 
     myAccount = new BankAccount(nome.toStdString(), saldo, iban.toStdString());
+
+    allAccounts.push_back(myAccount);
+
+    //account test x testare bonifici
+    BankAccount* accountAmico = new BankAccount("Luigi Verdi", 500.0, "IT00TESTAMICO");
+    allAccounts.push_back(accountAmico);
+
     ui->labelIban->setText("IBAN: N/D"); // testo predefinito prima del primo aggiornamento
     aggiornaInterfaccia();
 }
 
 MainWindow::~MainWindow() {
-    delete myAccount;
+    for (BankAccount* account : allAccounts) {
+        delete account;
+    }
+    allAccounts.clear(); //svuota la lista
+
     delete ui;
 }
 
@@ -86,9 +97,15 @@ void MainWindow::on_btnLoad_clicked() {
         return;
     }
 
-    // sostituisce il vecchio oggetto bankaccount con quello nuovo
-    delete myAccount; // cancella quello vecchio dalla memoria
-    myAccount = new BankAccount(nome.toStdString(), saldo, ibanLetto.toStdString());
+    for (size_t i = 0; i < allAccounts.size(); ++i) {
+        if (allAccounts[i] == myAccount) {  // se trovo il puntatore che corrisponde a myAccount attuale
+            delete allAccounts[i]; // cancella vecchio
+            myAccount = new BankAccount(nome.toStdString(), saldo, ibanLetto.toStdString()); // crea nuovo oggetto con i dati letti dal file
+            allAccounts[i] = myAccount;// aggiorna lista e mette il nuovo in quella posizione
+
+            break;
+        }
+    }
 
     file.close();
     aggiornaInterfaccia();
@@ -134,36 +151,98 @@ void MainWindow::aggiornaInterfaccia() {
 }
 
 void MainWindow::on_btnBonifico_clicked() {
-
-    double importo = ui->spinBoxImporto->value();  //prende l'importo dalla stessa casella
-
-    QString destinatarioNome = ui->editDestinatario->text();  //prende nome
-
+    double importo = ui->spinBoxImporto->value();
+    QString destinatarioNome = ui->editDestinatario->text();
     QString destinatarioIban = ui->editIbanDestinatario->text();
 
-    //nome non vuoto
+    if (importo <= 0) {
+        QMessageBox::warning(this, "Errore", "importo negativo");
+        return;
+    }
     if (destinatarioNome.isEmpty()) {
-        QMessageBox::warning(this, "Errore", "inserisci il nome del destinatario");
+        QMessageBox::warning(this, "Errore", "Inserisci il nome del destinatario");
+        return;
+    }
+    if (destinatarioIban.isEmpty()) {
+        QMessageBox::warning(this, "Errore", "Inserisci l'IBAN del destinatario");
         return;
     }
 
-    if (destinatarioIban.isEmpty()) {
-        QMessageBox::warning(this, "Errore", "Inserisci l'IBAN del destinatario!");
+    if (destinatarioIban.toStdString() == myAccount->getIban()) {
+        QMessageBox::warning(this, "Errore", "impossibile fare un bonifico a se stesso");
         return;
+    }
+
+    //cerca il destinatario nella lista dei conti
+    BankAccount* contoDestinatario = nullptr; //si considera che non esista nel sistema
+
+    for (BankAccount* account : allAccounts) {
+        if (account->getIban() == destinatarioIban.toStdString()) {
+            contoDestinatario = account;
+            break;
+        }
     }
 
     bool esito = myAccount->transfer(importo, destinatarioIban.toStdString(), destinatarioNome.toStdString());
 
     if (esito) {
-        QMessageBox::information(this, "Successo", "Bonifico di " + QString::number(importo, 'f', 2) + " EUR inviato a " + destinatarioNome + " (" + destinatarioIban + ")");
+        if (contoDestinatario != nullptr) {
+            // se destinatario è nostro cliente versa soldi anche a lui
+            std::string descrizioneVersamento = "Bonifico da " + myAccount->getOwnerName() + " (IBAN: " + myAccount->getIban() + ")";
+            contoDestinatario->deposit(importo, descrizioneVersamento);
 
-        // Cancella i campi dopo il successo
+            QMessageBox::information(this, "Successo",
+                                     "Bonifico interno eseguito\n" +
+                                     QString::number(importo, 'f', 2) + " EUR inviati a " + destinatarioNome + ".\n" +
+                                     "(Soldi accreditati sul conto destinatario)");
+        } else {
+            // se destinatario non è nella nostra lista i soldi spariscono dal mio conto e basta.
+            QMessageBox::information(this, "Successo",
+                                     "Bonifico esterno inviato\n" +
+                                     QString::number(importo, 'f', 2) + " EUR inviati a " + destinatarioNome + " (" + destinatarioIban + ")");
+        }
+
         ui->editDestinatario->clear();
         ui->editIbanDestinatario->clear();
-        ui->spinBoxImporto->setValue(0.0); // Resetta anche l'importo
+        ui->spinBoxImporto->setValue(0.0);
+
     } else {
-        QMessageBox::warning(this, "Errore Bonifico", "Fondi insufficienti per il bonifico!");
+        QMessageBox::warning(this, "Errore Bonifico", "soldi insufficienti per il bonifico");
     }
-    // aggiorna saldo
+
     aggiornaInterfaccia();
+}
+
+void MainWindow::on_btnImporta_clicked() {
+    //chiede quale aprire
+    QString fileName = QFileDialog::getOpenFileName(this, "Importa Conto Amico", "", "Text Files (*.txt)");
+    if (fileName.isEmpty()) return;
+
+    QFile file(fileName);
+    if (!file.open(QIODevice::ReadOnly | QIODevice::Text)) {
+        QMessageBox::warning(this, "Errore", "Impossibile aprire il file");
+        return;
+    }
+
+    QTextStream in(&file);
+    QString nome = in.readLine();
+    QString saldoStr = in.readLine();
+    QString iban = in.readLine();
+    file.close();
+
+    // controllo x duplicati
+    for (BankAccount* acc : allAccounts) {
+        if (acc->getIban() == iban.toStdString()) {
+            QMessageBox::warning(this, "Attenzione", "Questo conto è già stato caricato nel sistema");
+            return;
+        }
+    }
+
+    // crea nuovo conto
+    double saldo = saldoStr.toDouble();
+    BankAccount* contoAmico = new BankAccount(nome.toStdString(), saldo, iban.toStdString());
+
+    allAccounts.push_back(contoAmico);
+
+    QMessageBox::information(this, "OK", "Conto di " + nome + " importato correttamente\nOra puoi inviare un bonifico.");
 }
