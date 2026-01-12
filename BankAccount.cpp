@@ -39,7 +39,7 @@ bool BankAccount::withdraw(double amount, std::string description) {
     return true;
 }
 
-bool BankAccount::transfer(double amount, const std::string& recipientIban, const std::string& recipientName) {
+bool BankAccount::transfer(double amount, const std::string& recipientIban, const std::string &recipientName) {
     if (amount <= 0 || amount > balance) {
         return false;
     }
@@ -49,7 +49,7 @@ bool BankAccount::transfer(double amount, const std::string& recipientIban, cons
     return true;
 }
 
-void BankAccount::addTransaction(const Transaction& transaction) {
+void BankAccount::addTransaction(const Transaction &transaction) {
     transactions.push_back(transaction); // transactions è il vettore delle transaz
 }
 
@@ -59,4 +59,16 @@ std::string BankAccount::getIban() const {
 
 void BankAccount::setIban(const std::string &newIban) {
     iban = newIban;
+}
+
+void BankAccount::setFilePath(const std::string &path) {
+    filePath = path;
+}
+
+std::string BankAccount::getFilePath() const {
+    return filePath;
+}
+
+void BankAccount::loadTransactionFromDB(const Transaction& t) {
+    transactions.push_back(t);
 }

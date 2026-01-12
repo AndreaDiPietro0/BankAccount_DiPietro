@@ -26,11 +26,15 @@ public:
     std::string getIban() const;
 
     void setIban(const std::string &newIban);
+    void setFilePath(const std::string& path);
+    std::string getFilePath() const;
+    void loadTransactionFromDB(const Transaction& t);
 
 private:
     std::string ownerName;
     double balance;
     std::string iban;
+    std::string filePath;
     std::vector<Transaction> transactions; // storico movimenti
 
     // metodo privato per registrare la transazione

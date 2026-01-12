@@ -45,9 +45,9 @@ void MainWindow::on_btnPreleva_clicked() {
 }
 
 void MainWindow::on_btnSave_clicked() {
-    // chiede all'utente dove salvare
-    QString fileName = QFileDialog::getSaveFileName(this, "Salva Conto", "","Text Files (*.txt)"); // this perchè si apre una finestra figlia
-
+    //chiede dove salvare
+    QString fileName = QFileDialog::getSaveFileName(this, "Salva Conto", "",
+                                                    "Text Files (*.txt)"); // this perchè si apre una finestra figlia
     if (fileName.isEmpty()) return; // se l'utente preme annulla
 
     QFile file(fileName);
@@ -56,20 +56,30 @@ void MainWindow::on_btnSave_clicked() {
         return;
     }
 
-    QTextStream out(&file); // scrive i dati nel file
-    // scrive su due righe prima il nome poi il saldo
+    QTextStream out(&file);// scrive i dati nel file
+
+    // dati intestazione
     out << QString::fromStdString(myAccount->getOwnerName()) << "\n";
     out << myAccount->getBalance() << "\n";
     out << QString::fromStdString(myAccount->getIban()) << "\n";
 
+    // marcatore
+    out << "---STORICO---" << "\n";
+
+    // loop transazioni
+    // Formato riga: TIPO|IMPORTO|DESCRIZIONE
+    for (const auto &t: myAccount->getTransactionHistory()) {
+        out << t.getType() << "|"
+            << t.getAmount() << "|"
+            << QString::fromStdString(t.getDescription()) << "\n";
+    }
+
     file.close();
-    QMessageBox::information(this, "Successo", "Dati salvati correttamente");
+    QMessageBox::information(this, "Successo", "Conto e storico salvati correttamente");
 }
 
 void MainWindow::on_btnLoad_clicked() {
-    // chiede all'utente quale file aprire
     QString fileName = QFileDialog::getOpenFileName(this, "Carica Conto", "", "Text Files (*.txt)");
-
     if (fileName.isEmpty()) return;
 
     QFile file(fileName);
@@ -80,32 +90,50 @@ void MainWindow::on_btnLoad_clicked() {
 
     QTextStream in(&file);
 
-    QString nome = in.readLine();// legge i dati riga per riga
+    // legge intestazione
+    QString nome = in.readLine();
     QString saldoStr = in.readLine();
     QString ibanLetto = in.readLine();
 
-    // converte la stringa del saldo in numero
+    // crea nuovo oggetto account
     bool ok;
     double saldo = saldoStr.toDouble(&ok);
+    if (!ok) { QMessageBox::warning(this, "Errore", "File corrotto"); return; }
 
-    if (!ok) {
-        QMessageBox::warning(this, "Errore", "Il file è sbagliato o il formato non è valido");
-        return;
+    // gestione sostituzione nella lista
+    for (size_t i = 0; i < allAccounts.size(); ++i) {
+        if (allAccounts[i] == myAccount) {
+            delete allAccounts[i];
+            myAccount = new BankAccount(nome.toStdString(), saldo, ibanLetto.toStdString());
+            myAccount->setFilePath(fileName.toStdString()); // importante per l'aggiornamento automatico
+            allAccounts[i] = myAccount;
+            break;
+        }
     }
 
-    for (size_t i = 0; i < allAccounts.size(); ++i) {
-        if (allAccounts[i] == myAccount) {  // se trovo il puntatore che corrisponde a myAccount attuale
-            delete allAccounts[i]; // cancella vecchio
-            myAccount = new BankAccount(nome.toStdString(), saldo, ibanLetto.toStdString()); // crea nuovo oggetto con i dati letti dal file
-            allAccounts[i] = myAccount;// aggiorna lista e mette il nuovo in quella posizione
+    // legge lo storico se esiste
+    QString marker = in.readLine(); // legge  "---STORICO---"
 
-            break;
+    if (marker == "---STORICO---") {
+        while (!in.atEnd()) {
+            QString riga = in.readLine();
+            QStringList parti = riga.split("|");
+
+            if (parti.size() >= 3) {
+                // ricostruisce la transazione
+                int tipoInt = parti[0].toInt();
+                double importo = parti[1].toDouble();
+                QString descrizione = parti[2];
+
+                Transaction::Type tipo = (tipoInt == 0) ? Transaction::INCOME : Transaction::EXPENSE; // O EXPENSE, controlla il tuo enum!
+                myAccount->loadTransactionFromDB(Transaction(importo, tipo, descrizione.toStdString()));
+            }
         }
     }
 
     file.close();
     aggiornaInterfaccia();
-    QMessageBox::information(this, "Successo", "Conto caricato");
+    QMessageBox::information(this, "Successo", "Conto e storico caricati!");
 }
 
 void MainWindow::aggiornaInterfaccia() {
@@ -175,6 +203,27 @@ void MainWindow::on_btnBonifico_clicked() {
                 // bonifico interno
                 std::string desc = "Bonifico da " + myAccount->getOwnerName() + " (IBAN: " + myAccount->getIban() + ")";
                 contoDestinatario->deposit(importo, desc);
+                QString pathAmico = QString::fromStdString(contoDestinatario->getFilePath());
+
+                if (!pathAmico.isEmpty()) {
+                    QFile fileAmico(pathAmico);
+                    if (fileAmico.open(QIODevice::WriteOnly | QIODevice::Text)) {
+                        QTextStream out(&fileAmico);
+                        // dati base
+                        out << QString::fromStdString(contoDestinatario->getOwnerName()) << "\n";
+                        out << contoDestinatario->getBalance() << "\n";
+                        out << QString::fromStdString(contoDestinatario->getIban()) << "\n";
+
+                        // storico completo
+                        out << "---STORICO---" << "\n";
+                        for (const auto& t : contoDestinatario->getTransactionHistory()) {
+                            out << t.getType() << "|"
+                                << t.getAmount() << "|"
+                                << QString::fromStdString(t.getDescription()) << "\n";
+                        }
+                        fileAmico.close();
+                    }
+                }
                 QMessageBox::information(this, "Fatto", "Bonifico interno inviato a " + destNome);
             } else {
                 // bonifico esterno
@@ -216,6 +265,23 @@ void MainWindow::on_btnImporta_clicked() {
     // crea nuovo conto
     double saldo = saldoStr.toDouble();
     BankAccount* contoAmico = new BankAccount(nome.toStdString(), saldo, iban.toStdString());
+    contoAmico->setFilePath(fileName.toStdString());
+
+    QString marker = in.readLine();
+    if (marker == "---STORICO---") {
+        while (!in.atEnd()) {
+            QString riga = in.readLine();
+            QStringList parti = riga.split("|");
+            if (parti.size() >= 3) {
+                int tipoInt = parti[0].toInt();
+                double importo = parti[1].toDouble();
+                QString descrizione = parti[2];
+                Transaction::Type tipo = (tipoInt == 0) ? Transaction::INCOME : Transaction::EXPENSE; // O EXPENSE
+
+                contoAmico->loadTransactionFromDB(Transaction(importo, tipo, descrizione.toStdString()));
+            }
+        }
+    }
 
     allAccounts.push_back(contoAmico);
 
