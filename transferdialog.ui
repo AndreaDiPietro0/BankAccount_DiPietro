@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>649</width>
-    <height>480</height>
+    <width>351</width>
+    <height>731</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -16,18 +16,41 @@
   <widget class="QListWidget" name="listContatti">
    <property name="geometry">
     <rect>
-     <x>20</x>
-     <y>180</y>
+     <x>30</x>
+     <y>190</y>
      <width>291</width>
-     <height>241</height>
+     <height>141</height>
     </rect>
+   </property>
+   <property name="styleSheet">
+    <string notr="true">QListWidget {
+    border: 2px solid #ccc;   /* Bordo color Celeste Ghiaccio (o usa #ccc per grigio) */
+    border-radius: 18px;         
+    padding: 5px;               
+    outline: none;            
+}
+
+QListWidget::item {
+    padding: 8px;                /* spazio per rendere le righe più alte e cliccabili */
+    border-radius: 10px;        
+    margin-bottom: 2px;          /* spazio tra un nome e l'altro */
+}
+
+QListWidget::item:hover {
+    background-color: #f0f8ff;   /
+}
+
+QListWidget::item:selected {
+    background-color: #007BFF;   
+    color: white;                
+}</string>
    </property>
   </widget>
   <widget class="QLabel" name="label">
    <property name="geometry">
     <rect>
-     <x>20</x>
-     <y>150</y>
+     <x>30</x>
+     <y>160</y>
      <width>141</width>
      <height>16</height>
     </rect>
@@ -39,8 +62,8 @@
   <widget class="QDoubleSpinBox" name="spinAmount">
    <property name="geometry">
     <rect>
-     <x>410</x>
-     <y>220</y>
+     <x>130</x>
+     <y>510</y>
      <width>101</width>
      <height>41</height>
     </rect>
@@ -52,9 +75,9 @@
   <widget class="QLineEdit" name="editNome">
    <property name="geometry">
     <rect>
-     <x>340</x>
-     <y>70</y>
-     <width>271</width>
+     <x>30</x>
+     <y>360</y>
+     <width>291</width>
      <height>51</height>
     </rect>
    </property>
@@ -68,9 +91,9 @@
   <widget class="QLineEdit" name="editIban">
    <property name="geometry">
     <rect>
-     <x>340</x>
-     <y>140</y>
-     <width>271</width>
+     <x>30</x>
+     <y>440</y>
+     <width>291</width>
      <height>51</height>
     </rect>
    </property>
@@ -84,11 +107,29 @@
   <widget class="QPushButton" name="btnOk">
    <property name="geometry">
     <rect>
-     <x>340</x>
-     <y>290</y>
+     <x>30</x>
+     <y>580</y>
      <width>111</width>
      <height>61</height>
     </rect>
+   </property>
+   <property name="styleSheet">
+    <string notr="true">QPushButton {
+    background-color: #28a745;  
+    color: white;             
+    border-radius: 15px;        
+    padding: 10px;             
+    font-weight: bold;
+    border: none;
+}
+
+QPushButton:hover {
+    background-color: #218838;  
+}
+
+QPushButton:pressed {
+    background-color: #1e7e34;  
+}</string>
    </property>
    <property name="text">
     <string>conferma</string>
@@ -97,11 +138,29 @@
   <widget class="QPushButton" name="btnCancel">
    <property name="geometry">
     <rect>
-     <x>480</x>
-     <y>290</y>
+     <x>210</x>
+     <y>580</y>
      <width>101</width>
      <height>61</height>
     </rect>
+   </property>
+   <property name="styleSheet">
+    <string notr="true">QPushButton {
+    background-color: #dc3545; 
+    color: white;           
+    border-radius: 15px;        
+    padding: 10px;             
+    font-weight: bold;
+    border: none;
+}
+
+QPushButton:hover {
+    background-color: #c82333;  
+}
+
+QPushButton:pressed {
+    background-color: #bd2130; 
+}</string>
    </property>
    <property name="text">
     <string>annulla</string>
@@ -110,14 +169,32 @@
   <widget class="QPushButton" name="btnImportContact">
    <property name="geometry">
     <rect>
-     <x>90</x>
-     <y>50</y>
-     <width>171</width>
+     <x>30</x>
+     <y>40</y>
+     <width>291</width>
      <height>71</height>
     </rect>
    </property>
+   <property name="styleSheet">
+    <string notr="true">QPushButton {
+    background-color: #007BFF;  
+    color: white;             
+    border-radius: 15px;        
+    padding: 10px;             
+    font-weight: bold;
+    border: none;
+}
+
+QPushButton:hover {
+    background-color: #0056b3;  
+}
+
+QPushButton:pressed {
+    background-color: #004085;  
+}</string>
+   </property>
    <property name="text">
-    <string>Importa nuovo contatto</string>
+    <string>Importa destinatario</string>
    </property>
   </widget>
  </widget>

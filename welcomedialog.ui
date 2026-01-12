@@ -6,7 +6,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>502</width>
+    <width>563</width>
     <height>409</height>
    </rect>
   </property>
@@ -46,7 +46,7 @@
     <rect>
      <x>170</x>
      <y>270</y>
-     <width>131</width>
+     <width>171</width>
      <height>71</height>
     </rect>
    </property>
@@ -74,7 +74,7 @@ QPushButton:pressed {
 }</string>
    </property>
    <property name="text">
-    <string>Accedi</string>
+    <string>LOG IN</string>
    </property>
   </widget>
   <widget class="QLabel" name="label_3">
@@ -146,7 +146,7 @@ QPushButton:pressed {
     <rect>
      <x>170</x>
      <y>160</y>
-     <width>181</width>
+     <width>171</width>
      <height>31</height>
     </rect>
    </property>
@@ -218,14 +218,32 @@ QPushButton:pressed {
   <widget class="QPushButton" name="btnLoadFile">
    <property name="geometry">
     <rect>
-     <x>340</x>
+     <x>380</x>
      <y>270</y>
-     <width>151</width>
+     <width>161</width>
      <height>81</height>
     </rect>
    </property>
+   <property name="styleSheet">
+    <string notr="true">QPushButton {
+    background-color: #A2D2FF;  
+    color: #444444;             
+    border-radius: 15px;        
+    padding: 10px;             
+    font-weight: bold;
+    border: none;
+}
+
+QPushButton:hover {
+    background-color: #8ABCE8;  
+}
+
+QPushButton:pressed {
+    background-color: #72A6D1;  
+}</string>
+   </property>
    <property name="text">
-    <string>Carica conto esistente</string>
+    <string>CARICA CONTO </string>
    </property>
   </widget>
  </widget>
