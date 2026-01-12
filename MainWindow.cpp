@@ -177,7 +177,7 @@ void MainWindow::aggiornaInterfaccia() {
 void MainWindow::on_btnBonifico_clicked() {
     TransferDialog dialog(this);
 
-    dialog.setContacts(allAccounts, myAccount->getIban());     //passa lista di tutti i conti
+    dialog.setContacts(&allAccounts, myAccount->getIban());     //passa lista di tutti i conti
 
     if (dialog.exec() == QDialog::Accepted) { // Mostra finestra e aspetta
 
@@ -235,55 +235,4 @@ void MainWindow::on_btnBonifico_clicked() {
 
         aggiornaInterfaccia();
     }
-}
-
-void MainWindow::on_btnImporta_clicked() {
-    //chiede quale aprire
-    QString fileName = QFileDialog::getOpenFileName(this, "Importa Conto Amico", "", "Text Files (*.txt)");
-    if (fileName.isEmpty()) return;
-
-    QFile file(fileName);
-    if (!file.open(QIODevice::ReadOnly | QIODevice::Text)) {
-        QMessageBox::warning(this, "Errore", "Impossibile aprire il file");
-        return;
-    }
-
-    QTextStream in(&file);
-    QString nome = in.readLine();
-    QString saldoStr = in.readLine();
-    QString iban = in.readLine();
-    file.close();
-
-    // controllo x duplicati
-    for (BankAccount* acc : allAccounts) {
-        if (acc->getIban() == iban.toStdString()) {
-            QMessageBox::warning(this, "Attenzione", "Questo conto è già stato caricato nel sistema");
-            return;
-        }
-    }
-
-    // crea nuovo conto
-    double saldo = saldoStr.toDouble();
-    BankAccount* contoAmico = new BankAccount(nome.toStdString(), saldo, iban.toStdString());
-    contoAmico->setFilePath(fileName.toStdString());
-
-    QString marker = in.readLine();
-    if (marker == "---STORICO---") {
-        while (!in.atEnd()) {
-            QString riga = in.readLine();
-            QStringList parti = riga.split("|");
-            if (parti.size() >= 3) {
-                int tipoInt = parti[0].toInt();
-                double importo = parti[1].toDouble();
-                QString descrizione = parti[2];
-                Transaction::Type tipo = (tipoInt == 0) ? Transaction::INCOME : Transaction::EXPENSE; // O EXPENSE
-
-                contoAmico->loadTransactionFromDB(Transaction(importo, tipo, descrizione.toStdString()));
-            }
-        }
-    }
-
-    allAccounts.push_back(contoAmico);
-
-    QMessageBox::information(this, "OK", "Conto di " + nome + " importato correttamente\nOra puoi inviare un bonifico.");
 }

@@ -8,6 +8,10 @@
 #include <vector>
 #include "BankAccount.h"
 #include <QListWidgetItem>
+#include <QFileDialog> // per aprire i file
+#include <QFile>
+#include <QTextStream>
+#include <QMessageBox>
 
 namespace Ui {
     class TransferDialog;
@@ -21,8 +25,8 @@ public:
     explicit TransferDialog(QWidget *parent = nullptr);
     ~TransferDialog();
 
-    //passa lista dei conti e il mio iban (per non mostrarmi nella lista)
-    void setContacts(const std::vector<BankAccount*>& accounts, const std::string& myIban);
+    //accetta un ptr al vettore per poterlo modificare
+    void setContacts(std::vector<BankAccount*>* accounts, const std::string& myIban);
 
     double getAmount() const;
     QString getName() const;
@@ -31,10 +35,17 @@ public:
 private slots:
     void on_btnOk_clicked();
     void on_btnCancel_clicked();
-    void on_listContatti_itemClicked(QListWidgetItem *item); // se clicco un contatto
+    void on_listContatti_itemClicked(QListWidgetItem *item);
+
+    //per il nuovo bottone
+    void on_btnImportContact_clicked();
 
 private:
     Ui::TransferDialog *ui;
+
+    //  var x ricordare dov'è la lista principale
+    std::vector<BankAccount*>* mainAccountList;
+    std::string myCurrentIban;
 };
 
 #endif // TRANSFERDIALOG_H

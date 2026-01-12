@@ -23,10 +23,8 @@ private slots:
 
     void on_btnSave_clicked();
     void on_btnLoad_clicked();
-    void on_btnImporta_clicked();
 
-
-        private:
+private:
     Ui::MainWindow *ui;
     BankAccount* myAccount;
     std::vector<BankAccount*> allAccounts;
