@@ -4,6 +4,10 @@
 #include <QMainWindow>
 #include "BankAccount.h"
 #include <vector>
+#include <QMessageBox>
+#include <QFileDialog>  //  aprire le finestre di salvataggio
+#include <QFile>        //  gestire il file fisico
+#include <QTextStream>
 
 QT_BEGIN_NAMESPACE
 namespace Ui { class MainWindow; }
@@ -13,7 +17,7 @@ class MainWindow : public QMainWindow {
     Q_OBJECT
 
 public:
-    MainWindow(QString nome, double saldo, QString iban = "", QWidget *parent = nullptr);
+    MainWindow(QString nome, double saldo, QString iban, QString filePath = "", QWidget *parent = nullptr);
     ~MainWindow() override;
 
 private slots:
@@ -22,7 +26,6 @@ private slots:
     void on_btnBonifico_clicked();
 
     void on_btnSave_clicked();
-    void on_btnLoad_clicked();
 
 private:
     Ui::MainWindow *ui;

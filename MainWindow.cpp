@@ -8,16 +8,50 @@
 #include "Transaction.h"
 #include "transferdialog.h"
 
-MainWindow::MainWindow(QString nome, double saldo, QString iban, QWidget *parent) : QMainWindow(parent), ui(new Ui::MainWindow) {
+// Aggiorna la firma
+MainWindow::MainWindow(QString nome, double saldo, QString iban, QString filePath, QWidget *parent)
+        : QMainWindow(parent), ui(new Ui::MainWindow)
+{
     ui->setupUi(this);
     ui->spinBoxImporto->setMaximum(10000000.0);
 
-    if (nome.isEmpty()) nome = "Guest User"; // nome di default se vuoto
+    if (nome.isEmpty()) nome = "Guest User";
 
     myAccount = new BankAccount(nome.toStdString(), saldo, iban.toStdString());
 
+    // see ho un percorso file, impostiamolo e carica storico
+    if (!filePath.isEmpty()) {
+        myAccount->setFilePath(filePath.toStdString());
+
+        // carica storico dal file
+        QFile file(filePath);
+        if (file.open(QIODevice::ReadOnly | QIODevice::Text)) {
+            QTextStream in(&file);
+            // salto le prime 3 righe
+            in.readLine(); in.readLine(); in.readLine();
+
+            // carca storico
+            QString marker = in.readLine();
+            if (marker == "---STORICO---") {
+                while (!in.atEnd()) {
+                    QString riga = in.readLine();
+                    QStringList parti = riga.split("|");
+                    if (parti.size() >= 3) {
+                        int tipoInt = parti[0].toInt();
+                        double importo = parti[1].toDouble();
+                        QString descrizione = parti[2];
+                        Transaction::Type tipo = (tipoInt == 0) ? Transaction::INCOME : Transaction::EXPENSE;
+                        myAccount->loadTransactionFromDB(Transaction(importo, tipo, descrizione.toStdString()));
+                    }
+                }
+            }
+            file.close();
+        }
+    }
+
     allAccounts.push_back(myAccount);
-    ui->labelIban->setText("IBAN: N/D"); // testo predefinito prima del primo aggiornamento
+
+    ui->labelIban->setText("IBAN: " + QString::fromStdString(myAccount->getIban()));
     aggiornaInterfaccia();
 }
 
@@ -76,64 +110,6 @@ void MainWindow::on_btnSave_clicked() {
 
     file.close();
     QMessageBox::information(this, "Successo", "Conto e storico salvati correttamente");
-}
-
-void MainWindow::on_btnLoad_clicked() {
-    QString fileName = QFileDialog::getOpenFileName(this, "Carica Conto", "", "Text Files (*.txt)");
-    if (fileName.isEmpty()) return;
-
-    QFile file(fileName);
-    if (!file.open(QIODevice::ReadOnly | QIODevice::Text)) {
-        QMessageBox::critical(this, "Errore", "Impossibile aprire il file");
-        return;
-    }
-
-    QTextStream in(&file);
-
-    // legge intestazione
-    QString nome = in.readLine();
-    QString saldoStr = in.readLine();
-    QString ibanLetto = in.readLine();
-
-    // crea nuovo oggetto account
-    bool ok;
-    double saldo = saldoStr.toDouble(&ok);
-    if (!ok) { QMessageBox::warning(this, "Errore", "File corrotto"); return; }
-
-    // gestione sostituzione nella lista
-    for (size_t i = 0; i < allAccounts.size(); ++i) {
-        if (allAccounts[i] == myAccount) {
-            delete allAccounts[i];
-            myAccount = new BankAccount(nome.toStdString(), saldo, ibanLetto.toStdString());
-            myAccount->setFilePath(fileName.toStdString()); // importante per l'aggiornamento automatico
-            allAccounts[i] = myAccount;
-            break;
-        }
-    }
-
-    // legge lo storico se esiste
-    QString marker = in.readLine(); // legge  "---STORICO---"
-
-    if (marker == "---STORICO---") {
-        while (!in.atEnd()) {
-            QString riga = in.readLine();
-            QStringList parti = riga.split("|");
-
-            if (parti.size() >= 3) {
-                // ricostruisce la transazione
-                int tipoInt = parti[0].toInt();
-                double importo = parti[1].toDouble();
-                QString descrizione = parti[2];
-
-                Transaction::Type tipo = (tipoInt == 0) ? Transaction::INCOME : Transaction::EXPENSE; // O EXPENSE, controlla il tuo enum!
-                myAccount->loadTransactionFromDB(Transaction(importo, tipo, descrizione.toStdString()));
-            }
-        }
-    }
-
-    file.close();
-    aggiornaInterfaccia();
-    QMessageBox::information(this, "Successo", "Conto e storico caricati!");
 }
 
 void MainWindow::aggiornaInterfaccia() {

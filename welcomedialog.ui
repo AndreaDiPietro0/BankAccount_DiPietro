@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>457</width>
-    <height>373</height>
+    <width>502</width>
+    <height>409</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -213,6 +213,19 @@ QPushButton:pressed {
     padding: 5px;              /* spaziatura interna */
     font-size: 16px;           
 }</string>
+   </property>
+  </widget>
+  <widget class="QPushButton" name="btnLoadFile">
+   <property name="geometry">
+    <rect>
+     <x>340</x>
+     <y>270</y>
+     <width>151</width>
+     <height>81</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string>Carica conto esistente</string>
    </property>
   </widget>
  </widget>

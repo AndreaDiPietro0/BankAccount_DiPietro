@@ -17,16 +17,20 @@ Q_OBJECT
 
 public:
     explicit WelcomeDialog(QWidget *parent = nullptr);
-
     ~WelcomeDialog() override;
 
     QString getNome() const;
     double getSaldo() const;
-
     QString getIban() const;
+
+    QString getLoadedFilePath() const;
+
+private slots:
+    void on_btnLoadFile_clicked();
 
 private:
     Ui::WelcomeDialog *ui;
+    QString loadedFilePath;
 };
 
 

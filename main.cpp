@@ -15,8 +15,9 @@ int main(int argc, char *argv[]) {
         double saldoScelto = welcome.getSaldo();
         QString ibanScelto = welcome.getIban();
 
+        QString filePath = welcome.getLoadedFilePath();
         // crea la finestra principale con quei dati
-        MainWindow w(nomeScelto, saldoScelto, ibanScelto);
+        MainWindow w(nomeScelto, saldoScelto, ibanScelto, filePath);
         w.show();
 
         return a.exec();
