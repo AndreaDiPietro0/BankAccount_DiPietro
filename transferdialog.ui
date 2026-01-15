@@ -115,7 +115,7 @@ QListWidget::item:selected {
    </property>
    <property name="styleSheet">
     <string notr="true">QPushButton {
-    background-color: #28a745;  
+    background-color: #81C784;  
     color: white;             
     border-radius: 15px;        
     padding: 10px;             
@@ -124,11 +124,11 @@ QListWidget::item:selected {
 }
 
 QPushButton:hover {
-    background-color: #218838;  
+    background-color: #66BB6A;  
 }
 
 QPushButton:pressed {
-    background-color: #1e7e34;  
+    background-color: #4CAF50;  
 }</string>
    </property>
    <property name="text">
@@ -146,7 +146,7 @@ QPushButton:pressed {
    </property>
    <property name="styleSheet">
     <string notr="true">QPushButton {
-    background-color: #dc3545; 
+    background-color: #EF9A9A; 
     color: white;           
     border-radius: 15px;        
     padding: 10px;             
@@ -155,11 +155,11 @@ QPushButton:pressed {
 }
 
 QPushButton:hover {
-    background-color: #c82333;  
+    background-color: #E57373;  
 }
 
 QPushButton:pressed {
-    background-color: #bd2130; 
+    background-color: #F44336; 
 }</string>
    </property>
    <property name="text">
@@ -177,7 +177,7 @@ QPushButton:pressed {
    </property>
    <property name="styleSheet">
     <string notr="true">QPushButton {
-    background-color: #007BFF;  
+    background-color: #90CAF9;  
     color: white;             
     border-radius: 15px;        
     padding: 10px;             
@@ -186,11 +186,11 @@ QPushButton:pressed {
 }
 
 QPushButton:hover {
-    background-color: #0056b3;  
+    background-color: #64B5F6;  
 }
 
 QPushButton:pressed {
-    background-color: #004085;  
+    background-color: #2196F3;  
 }</string>
    </property>
    <property name="text">

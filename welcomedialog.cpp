@@ -14,7 +14,7 @@ WelcomeDialog::WelcomeDialog(QWidget *parent) : QDialog(parent), ui(new Ui::Welc
     ui->spinSaldo->setValue(0.0);
 
     // collega bottone alla funzione "accept" di QDialog, accept() chiude la finestra
-    connect(ui->btnEnter, &QPushButton::clicked, this, &WelcomeDialog::accept);
+    //connect(ui->btnEnter, &QPushButton::clicked, this, &WelcomeDialog::accept);
 }
 
 WelcomeDialog::~WelcomeDialog() {
@@ -68,5 +68,16 @@ void WelcomeDialog::on_btnLoadFile_clicked() {
 
     loadedFilePath = fileName;
 
+    accept();
+}
+
+void WelcomeDialog::on_btnEnter_clicked() {
+    QString nome = ui->editNome->text();
+    QString iban = ui->editIban->text();
+
+    if (nome.isEmpty() || iban.isEmpty()) {
+        QMessageBox::warning(this, "Dati mancanti", "Inserisci Nome e IBAN per continuare.\nOppure carica un conto esistente.");
+        return;
+    }
     accept();
 }

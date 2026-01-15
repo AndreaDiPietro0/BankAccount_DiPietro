@@ -192,7 +192,7 @@ QPushButton:pressed {
 }</string>
     </property>
     <property name="text">
-     <string>Invia bonifico</string>
+     <string>Bonifici</string>
     </property>
    </widget>
    <widget class="QListWidget" name="listTransactions">

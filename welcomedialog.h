@@ -27,6 +27,7 @@ public:
 
 private slots:
     void on_btnLoadFile_clicked();
+    void on_btnEnter_clicked();
 
 private:
     Ui::WelcomeDialog *ui;
