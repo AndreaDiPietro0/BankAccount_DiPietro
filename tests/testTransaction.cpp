@@ -6,25 +6,25 @@
 #include "../Transaction.h"
 
 TEST(TransactionTest, ConstructorValues) {
-Transaction t(100.0, Transaction::INCOME, "Stipendio");
+Transaction t(100.0, Transaction::INCOME, "stipendio");
 
 ASSERT_EQ(t.getAmount(), 100.0);
 ASSERT_EQ(t.getType(), Transaction::INCOME);
-ASSERT_EQ(t.getDescription(), "Stipendio");
+ASSERT_EQ(t.getDescription(), "stipendio");
 }
 
 TEST(TransactionTest, DateIsGenerated) {
-Transaction t(50.0, Transaction::EXPENSE, "Spesa");
+Transaction t(50.0, Transaction::EXPENSE, "spesa");
 
 std::string date = t.getDate();
 
 ASSERT_FALSE(date.empty()); // controlla che la stringa non sia vuota e che sia lunga il giusto
-ASSERT_GT(date.length(), 10); // GT = Greater Than (Maggiore di)
+ASSERT_GT(date.length(), 10); //greater than
 }
 
 TEST(TransactionTest, LongDescription) {
-std::string desc = "Pagamento per la cena di ieri sera con gli amici";
+std::string desc = "rimborso spese";
 Transaction t(25.50, Transaction::EXPENSE, desc);
 
-ASSERT_EQ(t.getDescription(), "Pagamento per la cena di ieri sera con gli amici");
+ASSERT_EQ(t.getDescription(), "rimborso spese");
 }

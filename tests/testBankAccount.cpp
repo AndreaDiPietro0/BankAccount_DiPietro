@@ -12,7 +12,6 @@ protected:
     void SetUp() override {
         account = new BankAccount("Test User", 100.0); // saldo iniziale 100
     }
-
     //  eseguito dopo ogni singolo TEST_F x pulizia dopo che è stato eseguito il test
     void TearDown() override {
         delete account;

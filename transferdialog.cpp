@@ -26,7 +26,7 @@ void TransferDialog::setContacts(std::vector<BankAccount*>* accounts, const std:
 
     ui->listContatti->clear();
 
-    // Usa (*accounts) per accedere al vettore puntato
+    // usa *accounts per accedere al vettore puntato
     for (const auto& acc : *accounts) {
         if (acc->getIban() != myIban) {
             QString voce = QString::fromStdString(acc->getOwnerName()) + " (" + QString::fromStdString(acc->getIban()) + ")";

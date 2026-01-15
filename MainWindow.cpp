@@ -8,7 +8,6 @@
 #include "Transaction.h"
 #include "transferdialog.h"
 
-// Aggiorna la firma
 MainWindow::MainWindow(QString nome, double saldo, QString iban, QString filePath, QWidget *parent)
         : QMainWindow(parent), ui(new Ui::MainWindow)
 {
@@ -19,7 +18,7 @@ MainWindow::MainWindow(QString nome, double saldo, QString iban, QString filePat
 
     myAccount = new BankAccount(nome.toStdString(), saldo, iban.toStdString());
 
-    // see ho un percorso file, impostiamolo e carica storico
+    // se ho un percorso file, lo imposta e carica storico
     if (!filePath.isEmpty()) {
         myAccount->setFilePath(filePath.toStdString());
 
@@ -155,7 +154,7 @@ void MainWindow::on_btnBonifico_clicked() {
 
     dialog.setContacts(&allAccounts, myAccount->getIban());     //passa lista di tutti i conti
 
-    if (dialog.exec() == QDialog::Accepted) { // Mostra finestra e aspetta
+    if (dialog.exec() == QDialog::Accepted) { // mostra finestra e aspetta
 
         // se premo ok recupera i dati
         double importo = dialog.getAmount();
