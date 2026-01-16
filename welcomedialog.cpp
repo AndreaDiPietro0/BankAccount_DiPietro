@@ -12,7 +12,7 @@
 WelcomeDialog::WelcomeDialog(QWidget *parent) : QDialog(parent), ui(new Ui::WelcomeDialog) {
     ui->setupUi(this);
     ui->spinSaldo->setValue(0.0);
-
+    ui->spinSaldo->setSpecialValueText("Saldo iniziale ");
     // collega bottone alla funzione "accept" di QDialog, accept() chiude la finestra
     //connect(ui->btnEnter, &QPushButton::clicked, this, &WelcomeDialog::accept);
 }
