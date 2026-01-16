@@ -17,7 +17,7 @@
    <widget class="QLabel" name="labelSaldo">
     <property name="geometry">
      <rect>
-      <x>140</x>
+      <x>170</x>
       <y>0</y>
       <width>341</width>
       <height>51</height>
@@ -124,7 +124,7 @@ QPushButton:pressed {
    <widget class="QPushButton" name="btnSave">
     <property name="geometry">
      <rect>
-      <x>80</x>
+      <x>110</x>
       <y>530</y>
       <width>191</width>
       <height>81</height>
@@ -161,7 +161,7 @@ QPushButton:pressed {
    <widget class="QPushButton" name="btnBonifico">
     <property name="geometry">
      <rect>
-      <x>390</x>
+      <x>370</x>
       <y>530</y>
       <width>191</width>
       <height>81</height>
@@ -199,8 +199,8 @@ QPushButton:pressed {
     <property name="geometry">
      <rect>
       <x>110</x>
-      <y>390</y>
-      <width>421</width>
+      <y>370</y>
+      <width>451</width>
       <height>121</height>
      </rect>
     </property>
@@ -231,8 +231,8 @@ QListWidget::item:selected {
    <widget class="QLabel" name="labelMovimenti">
     <property name="geometry">
      <rect>
-      <x>260</x>
-      <y>340</y>
+      <x>290</x>
+      <y>330</y>
       <width>121</width>
       <height>41</height>
      </rect>
@@ -255,7 +255,7 @@ QListWidget::item:selected {
 }</string>
     </property>
     <property name="text">
-     <string>I tuoi movimenti</string>
+     <string>Operazioni</string>
     </property>
    </widget>
    <widget class="QLabel" name="labeInsImp">
@@ -291,7 +291,7 @@ QListWidget::item:selected {
    <widget class="QDoubleSpinBox" name="spinBoxImporto">
     <property name="geometry">
      <rect>
-      <x>230</x>
+      <x>250</x>
       <y>140</y>
       <width>181</width>
       <height>51</height>
