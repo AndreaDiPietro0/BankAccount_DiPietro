@@ -13,8 +13,8 @@ WelcomeDialog::WelcomeDialog(QWidget *parent) : QDialog(parent), ui(new Ui::Welc
     ui->setupUi(this);
     ui->spinSaldo->setValue(0.0);
     ui->spinSaldo->setSpecialValueText("Saldo iniziale ");
-    // collega bottone alla funzione "accept" di QDialog, accept() chiude la finestra
-    //connect(ui->btnEnter, &QPushButton::clicked, this, &WelcomeDialog::accept);
+
+    ui->editIban->setMaxLength(27);
 }
 
 WelcomeDialog::~WelcomeDialog() {
@@ -73,11 +73,29 @@ void WelcomeDialog::on_btnLoadFile_clicked() {
 
 void WelcomeDialog::on_btnEnter_clicked() {
     QString nome = ui->editNome->text();
-    QString iban = ui->editIban->text();
+
+    // .simplified() -> toglie spazi all'inizio e fine
+    // .remove(" ") -> toglie gli spazi in mezzo (se l'utente scrive "IT00 123...")
+    // .toUpper() -> trasforma tutto in maiuscolo
+    QString iban = ui->editIban->text().simplified().remove(" ").toUpper();
 
     if (nome.isEmpty() || iban.isEmpty()) {
-        QMessageBox::warning(this, "Dati mancanti", "Inserisci Nome e IBAN per continuare.\nOppure carica un conto esistente.");
+        QMessageBox::warning(this, "Dati mancanti", "Inserisci Nome e IBAN per continuare.\noppure carica un conto esistente.");
         return;
     }
+
+    if (iban.length() != 27) {
+        QString msg = QString("L'IBAN deve essere di 27 caratteri.\n ne hai inseriti: %1").arg(iban.length());
+        QMessageBox::warning(this, "Lunghezza IBAN Errata", msg);
+        return;
+    }
+
+    if (!iban.startsWith("IT")) {
+        QMessageBox::warning(this, "Formato Errato", "L'IBAN deve iniziare con 'IT'.");
+        return;
+    }
+
+    ui->editIban->setText(iban);
+
     accept();
 }
