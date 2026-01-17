@@ -3,74 +3,84 @@
 //
 
 #include "gtest/gtest.h"
-#include "../BankAccount.h" // Torniamo indietro di una cartella per trovare l'header
+#include "../BankAccount.h"
 
-// classe x creare un ambiente comune per i test
 class BankAccountTest : public ::testing::Test {
 protected:
-    //  eseguito prima di ogni singolo TEST_F
     void SetUp() override {
-        account = new BankAccount("Test User", 100.0); // saldo iniziale 100
+        account = new BankAccount("Luca", 100.0, "IT0000000000000000000000000");
     }
-    //  eseguito dopo ogni singolo TEST_F x pulizia dopo che è stato eseguito il test
+
     void TearDown() override {
         delete account;
     }
 
-    BankAccount* account; // puntatore all'oggetto da testare
+    BankAccount* account;
 };
 
-// test costruttore
+// 1 costruttore e getter
 TEST_F(BankAccountTest, InitialBalanceCheck) {
-ASSERT_EQ(account->getBalance(), 100.0);
-ASSERT_EQ(account->getOwnerName(), "Test User");
+    ASSERT_EQ(account->getBalance(), 100.0);
+    ASSERT_EQ(account->getOwnerName(), "Luca");
+    ASSERT_EQ(account->getIban(), "IT0000000000000000000000000");
+
+    ASSERT_EQ(account->getTransactionHistory().size(), 1); // verifica che ci sia già la prima transazione di apertura conto
 }
 
-// test deposit
+//2 deposito > 0
 TEST_F(BankAccountTest, DepositIncreasesBalance) {
-account->deposit(50.0);
-ASSERT_EQ(account->getBalance(), 150.0); // 100 + 50 = 150
+    account->deposit(50.0);
+    ASSERT_EQ(account->getBalance(), 150.0);
 }
 
-// test importi negativi
+// 3 test deposito < 0
 TEST_F(BankAccountTest, DepositNegativeAmount) {
-account->deposit(-50.0);
-ASSERT_EQ(account->getBalance(), 100.0); // il saldo non deve cambiare
+    account->deposit(-50.0);
+    ASSERT_EQ(account->getBalance(), 100.0);
 }
 
-// test prelievo
+// 4 prelievo
 TEST_F(BankAccountTest, WithdrawSuccess) {
-bool result = account->withdraw(40.0);
-ASSERT_TRUE(result); // deve ritornare true
-ASSERT_EQ(account->getBalance(), 60.0); // 100 - 40 = 60
+    bool result = account->withdraw(40.0);
+    ASSERT_TRUE(result);
+    ASSERT_EQ(account->getBalance(), 60.0);
 }
 
-// test prelievo superiore
+// 5 prelievo > fondi
 TEST_F(BankAccountTest, WithdrawFailureInsufficientFunds) {
-bool result = account->withdraw(200.0);
-ASSERT_FALSE(result);
-ASSERT_EQ(account->getBalance(), 100.0); //  saldo non deve cambiare
+    bool result = account->withdraw(200.0);
+    ASSERT_FALSE(result);
+    ASSERT_EQ(account->getBalance(), 100.0);
 }
 
-//test bonifico
-TEST_F(BankAccountTest, TransferSuccess) {
-BankAccount secondAccount("Receiver", 0.0);
+// 6 bonifico
+TEST_F(BankAccountTest, TransferReducesSenderBalance) {
+    bool result = account->transfer(30.0, "IT1111111111111111111111111", "Andrea");
 
-bool result = account->transfer(secondAccount, 30.0, std::string());
+    ASSERT_TRUE(result);
+    ASSERT_EQ(account->getBalance(), 70.0);
 
-ASSERT_TRUE(result);
-ASSERT_EQ(account->getBalance(), 70.0); // 100 - 30
-ASSERT_EQ(secondAccount.getBalance(), 30.0); // 0 + 30
+    auto history = account->getTransactionHistory(); // controlla che abbia creato la transazione corretta
+
+    ASSERT_EQ(history.size(), 2); // dimensione 2, 1iniziale + 1 bonifico
+
+    std::string lastDesc = history.back().getDescription();     // controlla descrizione
+    ASSERT_NE(lastDesc.find("Andrea"), std::string::npos); // cerca il nome
+    ASSERT_NE(lastDesc.find("IT1111111111111111111111111"), std::string::npos); // cerca iban
 }
 
-// test cronologia transaz
+// 7 cronologia
 TEST_F(BankAccountTest, TransactionHistoryUpdate) {
-account->deposit(50.0);
-account->withdraw(20.0);
+    //1 transazione saldo iniziale
+    account->deposit(50.0);  // transazione 2
+    account->withdraw(20.0); // transazione 3
 
-std::vector<Transaction> history = account->getTransactionHistory();
+    std::vector<Transaction> history = account->getTransactionHistory();
 
-ASSERT_EQ(history.size(), 2); // 2 transaz
-ASSERT_EQ(history[0].getType(), Transaction::INCOME);
-ASSERT_EQ(history[1].getType(), Transaction::EXPENSE);
+    ASSERT_EQ(history.size(), 3);     // devono esser 3 transazioni
+
+    // verifica i tipi
+    ASSERT_EQ(history[0].getType(), Transaction::INCOME);  // saldo iniziale
+    ASSERT_EQ(history[1].getType(), Transaction::INCOME);  // deposito
+    ASSERT_EQ(history[2].getType(), Transaction::EXPENSE); // prelievo
 }
