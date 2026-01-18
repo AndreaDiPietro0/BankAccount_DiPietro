@@ -7,7 +7,7 @@ int main(int argc, char *argv[]) {
 
     WelcomeDialog welcome;
 
-    //welcome.exec() blocca il programma finché l'utente non clicca accedi
+    //welcome.exec blocca il programma finché non clicco accedi
     if (welcome.exec() == QDialog::Accepted) {
 
         // prende dati inseriti
@@ -23,6 +23,5 @@ int main(int argc, char *argv[]) {
         return a.exec();
     }
 
-    // Se chiudo la finestra di benvenuto il programma finisce qui.
     return 0;
 }

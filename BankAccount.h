@@ -37,7 +37,6 @@ private:
     std::string filePath;
     std::vector<Transaction> transactions; // storico movimenti
 
-    // metodo privato per registrare la transazione
     void addTransaction(const Transaction& transaction);
 };
 

@@ -13,7 +13,6 @@ WelcomeDialog::WelcomeDialog(QWidget *parent) : QDialog(parent), ui(new Ui::Welc
     ui->setupUi(this);
     ui->spinSaldo->setValue(0.0);
     ui->spinSaldo->setSpecialValueText("Saldo iniziale ");
-
     ui->editIban->setMaxLength(27);
 }
 
@@ -74,9 +73,9 @@ void WelcomeDialog::on_btnLoadFile_clicked() {
 void WelcomeDialog::on_btnEnter_clicked() {
     QString nome = ui->editNome->text();
 
-    // .simplified() -> toglie spazi all'inizio e fine
-    // .remove(" ") -> toglie gli spazi in mezzo (se l'utente scrive "IT00 123...")
-    // .toUpper() -> trasforma tutto in maiuscolo
+    // simplified toglie spazi all'inizio e fine
+    // remove toglie gli spazi in mezzo
+    // toUpper trasforma tutto in maiuscolo
     QString iban = ui->editIban->text().simplified().remove(" ").toUpper();
 
     if (nome.isEmpty() || iban.isEmpty()) {
